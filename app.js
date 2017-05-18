@@ -194,16 +194,6 @@ function ensureAuthenticated(req, res, next) {
   res.redirect('/login');
 };
 
-app.get('/', function (req, res) {
-  var htmlStream = mu2.compileAndRender('index.html', { ip: req.ip });
-  htmlStream.pipe(res);
-});
-
-app.get('/api/profile', ensureAuthenticated, function (req, res) {
-  let data = { UserName:"The King" };
-  res.end(JSON.stringify(data));
-})
-
 app.get('/api/profiles', ensureAuthenticated, function (req, res) {
   let data = { ManyPeoples:"100" };
   res.end(JSON.stringify(data));
@@ -268,6 +258,17 @@ app.get('/logout', function (req, res) {
     res.redirect(config.destroySessionUrl);
   });
 });
+
+//API's
+app.get('/', function (req, res) {
+  var htmlStream = mu2.compileAndRender('index.html', { ip: req.ip });
+  htmlStream.pipe(res);
+});
+
+app.get('/api/profile', ensureAuthenticated, function (req, res) {
+  let data = { UserName:"The King" };
+  res.end(JSON.stringify(data));
+})
 
 app.listen(3000);
 
