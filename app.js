@@ -35,7 +35,10 @@ var methodOverride = require('method-override');
 var passport = require('passport');
 var util = require('util');
 var bunyan = require('bunyan');
+var html = require('html');
 var config = require('./config');
+var mu2 = require('mu2');
+mu2.root = __dirname + '/views';
 
 // set up database for express session
 var MongoStore = require('connect-mongo')(expressSession);
@@ -146,9 +149,7 @@ passport.use(new OIDCStrategy({
 // Config the app, include middlewares
 //-----------------------------------------------------------------------------
 var app = express();
-
-app.set('views', __dirname + '/views');
-app.set('view engine', 'ejs');
+app.set('view engine', 'html');
 app.use(express.logger());
 app.use(methodOverride());
 app.use(cookieParser());
@@ -194,18 +195,14 @@ function ensureAuthenticated(req, res, next) {
 };
 
 app.get('/', function (req, res) {
-  res.render('index', { user: req.user });
+  var htmlStream = mu2.compileAndRender('index.html', { ip: req.ip });
+  htmlStream.pipe(res);
 });
 
-app.get('/profiles', ensureAuthenticated, function (req, res) {
+app.get('/profile', ensureAuthenticated, function (req, res) {
   let data = { happy: 'fun' };
   res.end(JSON.stringify(data));
 })
-
-// '/account' is only available to logged in user
-app.get('/account', ensureAuthenticated, function (req, res) {
-  res.render('account', { user: req.user });
-});
 
 app.get('/login',
   function (req, res, next) {
