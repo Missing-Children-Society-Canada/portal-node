@@ -199,7 +199,7 @@ app.get('/', function (req, res) {
   htmlStream.pipe(res);
 });
 
-app.get('/profile', ensureAuthenticated, function (req, res) {
+app.get('/api/profile', ensureAuthenticated, function (req, res) {
   let data = { happy: 'fun' };
   res.end(JSON.stringify(data));
 })
