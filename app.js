@@ -200,7 +200,12 @@ app.get('/', function (req, res) {
 });
 
 app.get('/api/profile', ensureAuthenticated, function (req, res) {
-  let data = { happy: 'fun' };
+  let data = { UserName:"The King" };
+  res.end(JSON.stringify(data));
+})
+
+app.get('/api/profiles', ensureAuthenticated, function (req, res) {
+  let data = { ManyPeoples:"100" };
   res.end(JSON.stringify(data));
 })
 
