@@ -1,6 +1,6 @@
 
 /*
- * GET users listing.
+ * GET profile listing.
  */
 
 exports.list = function(req, res){
