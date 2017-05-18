@@ -1,31 +1,4 @@
-/**
- * Copyright (c) Microsoft Corporation
- *  All Rights Reserved
- *  MIT License
- *
- * Permission is hereby granted, free of charge, to any person obtaining a copy of this
- * software and associated documentation files (the 'Software'), to deal in the Software
- * without restriction, including without limitation the rights to use, copy, modify,
- * merge, publish, distribute, sublicense, and/or sell copies of the Software, and to
- * permit persons to whom the Software is furnished to do so, subject to the following
- * conditions:
- *
- * The above copyright notice and this permission notice shall be
- * included in all copies or substantial portions of the Software.
- *
- * THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
- * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS
- * OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- * WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT
- * OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
- */
-
 'use strict';
-
-/******************************************************************************
- * Module dependencies.
- *****************************************************************************/
 
 var express = require('express');
 var cookieParser = require('cookie-parser');
@@ -35,33 +8,19 @@ var methodOverride = require('method-override');
 var passport = require('passport');
 var util = require('util');
 var bunyan = require('bunyan');
-var html = require('html');
 var config = require('./config');
 var mu2 = require('mu2');
 mu2.root = __dirname + '/views';
 
-// set up database for express session
 var MongoStore = require('connect-mongo')(expressSession);
 var mongoose = require('mongoose');
-
-// Start QuickStart here
 
 var OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
 
 var log = bunyan.createLogger({
-  name: 'Microsoft OIDC Example Web Application'
+  name: 'MCSC: Child Finder'
 });
 
-/******************************************************************************
- * Set up passport in the app 
- ******************************************************************************/
-
-//-----------------------------------------------------------------------------
-// To support persistent login sessions, Passport needs to be able to
-// serialize users into and deserialize users out of the session.  Typically,
-// this will be as simple as storing the user ID when serializing, and finding
-// the user by ID when deserializing.
-//-----------------------------------------------------------------------------
 passport.serializeUser(function (user, done) {
   done(null, user.oid);
 });
@@ -72,7 +31,6 @@ passport.deserializeUser(function (oid, done) {
   });
 });
 
-// array to hold logged in users
 var users = [];
 
 var findByOid = function (oid, fn) {
@@ -86,23 +44,6 @@ var findByOid = function (oid, fn) {
   return fn(null, null);
 };
 
-//-----------------------------------------------------------------------------
-// Use the OIDCStrategy within Passport.
-// 
-// Strategies in passport require a `verify` function, which accepts credentials
-// (in this case, the `oid` claim in id_token), and invoke a callback to find
-// the corresponding user object.
-// 
-// The following are the accepted prototypes for the `verify` function
-// (1) function(iss, sub, done)
-// (2) function(iss, sub, profile, done)
-// (3) function(iss, sub, profile, access_token, refresh_token, done)
-// (4) function(iss, sub, profile, access_token, refresh_token, params, done)
-// (5) function(iss, sub, profile, jwtClaims, access_token, refresh_token, params, done)
-// (6) prototype (1)-(5) with an additional `req` parameter as the first parameter
-//
-// To do prototype (6), passReqToCallback must be set to true in the config.
-//-----------------------------------------------------------------------------
 passport.use(new OIDCStrategy({
   identityMetadata: config.creds.identityMetadata,
   clientID: config.creds.clientID,
@@ -144,12 +85,7 @@ passport.use(new OIDCStrategy({
   }
 ));
 
-
-//-----------------------------------------------------------------------------
-// Config the app, include middlewares
-//-----------------------------------------------------------------------------
 var app = express();
-app.set('view engine', 'html');
 app.use(express.logger());
 app.use(methodOverride());
 app.use(cookieParser());
@@ -170,32 +106,17 @@ if (config.useMongoDBSessionStore) {
 }
 
 app.use(bodyParser.urlencoded({ extended: true }));
-
-// Initialize Passport!  Also use passport.session() middleware, to support
-// persistent login sessions (recommended).
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
-app.use(express.static(__dirname + '/../../public'));
 
-//-----------------------------------------------------------------------------
-// Set up the route controller
-//
-// 1. For 'login' route and 'returnURL' route, use `passport.authenticate`. 
-// This way the passport middleware can redirect the user to login page, receive
-// id_token etc from returnURL.
-//
-// 2. For the routes you want to check if user is already logged in, use 
-// `ensureAuthenticated`. It checks if there is an user stored in session, if not
-// it will call `passport.authenticate` to ask for user to log in.
-//-----------------------------------------------------------------------------
 function ensureAuthenticated(req, res, next) {
   if (req.isAuthenticated()) { return next(); }
   res.redirect('/login');
 };
 
 app.get('/api/profiles', ensureAuthenticated, function (req, res) {
-  let data = { ManyPeoples:"100" };
+  let data = { ManyPeoples: "100" };
   res.end(JSON.stringify(data));
 })
 
@@ -215,10 +136,6 @@ app.get('/login',
     res.redirect('/');
   });
 
-// 'GET returnURL'
-// `passport.authenticate` will try to authenticate the content returned in
-// query (such as authorization code). If authentication fails, user will be
-// redirected to '/' (home page); otherwise, it passes to the next middleware.
 app.get('/auth/openid/return',
   function (req, res, next) {
     passport.authenticate('azuread-openidconnect',
@@ -233,10 +150,6 @@ app.get('/auth/openid/return',
     res.redirect('/');
   });
 
-// 'POST returnURL'
-// `passport.authenticate` will try to authenticate the content returned in
-// body (such as authorization code). If authentication fails, user will be
-// redirected to '/' (home page); otherwise, it passes to the next middleware.
 app.post('/auth/openid/return',
   function (req, res, next) {
     passport.authenticate('azuread-openidconnect',
@@ -251,7 +164,6 @@ app.post('/auth/openid/return',
     res.redirect('/');
   });
 
-// 'logout' route, logout from passport, and destroy the session with AAD.
 app.get('/logout', function (req, res) {
   req.session.destroy(function (err) {
     req.logOut();
@@ -266,9 +178,8 @@ app.get('/', function (req, res) {
 });
 
 app.get('/api/profile', ensureAuthenticated, function (req, res) {
-  let data = { UserName:"The King" };
+  let data = { UserName: "The King" };
   res.end(JSON.stringify(data));
 })
 
 app.listen(3000);
-
