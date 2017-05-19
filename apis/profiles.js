@@ -1,5 +1,4 @@
 'use strict';
-var assign = require('object-assign');
 var DocumentDBClient = require('documentdb').DocumentClient;
 
 var Profile = function(config) {

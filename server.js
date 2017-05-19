@@ -8,14 +8,15 @@ var methodOverride = require('method-override');
 var passport = require('passport');
 var util = require('util');
 var bunyan = require('bunyan');
+var mongoose = require('mongoose');
 var config = require('./config');
 var ProfileApi = require('./apis/profiles');
+var User = require('./models/user');
 
 // Controllers
 var profiles = require('./controllers/profilesController');
 
 var MongoStore = require('connect-mongo')(expressSession);
-var mongoose = require('mongoose');
 
 var OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
 
@@ -172,26 +173,23 @@ app.get('/logout', function (req, res) {
 
 // APP
 app.get('/', function (req, res) {
-  var authenticated = req.isAuthenticated();
-  if (authenticated) {
+  var user = new User(req);
+  if (user.isAuthenticated) {
     new ProfileApi(config.docDB).getList().then((profiles) => {
-      console.log(profiles.length);
       res.render('index', {
-        user: {
-          isAuthenticated: authenticated
-        },
+        user: user,
         profiles: profiles
       });      
     })
   }
   else {
     res.render('index', {
-      user: {
-        isAuthenticated: authenticated
-      }
+        user: user
     });    
   }
 });
+
+app.get('/profile/:id', ensureAuthenticated, profiles.show);
 
 
 // APIS

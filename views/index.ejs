@@ -1,72 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/app.css">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>    
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <title>Missing Children Society Canada</title>
-  </head>
-  <body>
-    <nav class="navbar navbar-default">
-      <div class="container-fluid">
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="navbar-brand" href="#">Missing Children Society Canada Portal</a>
-        </div>
+<% include ../views/partials/header %>
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-          <form class="navbar-form navbar-right">
-            <% if (user.isAuthenticated) { %>
-              <a href="/logout" class="btn btn-success">Logout</a>
-            <% } %>
-          </form>
-        </div><!-- /.navbar-collapse -->
-      </div><!-- /.container-fluid -->
-    </nav>
-    <div class="container home">
-      <div class="jumbotron">
-        <img src="img/mcsc-logo.png">
-        <h2>Person Finder App</h2>
-        <% if (!user.isAuthenticated) { %>
-          <h3>To request access please contact <a href="https://mcsc.ca/">Missing Children Society of Canada</a>.</h3>
-          <div class="login">
-            <a class="btn btn-success btn-lg" href="/login" role="button">Login as Admin</a>    
-          </div>
-        <% } %>
+<div class="container home">
+  <div class="jumbotron">
+    <img src="img/mcsc-logo.png">
+    <h2>Person Finder App</h2>
+    <% if (!user.isAuthenticated) { %>
+      <h3>To request access please contact <a href="https://mcsc.ca/">Missing Children Society of Canada</a>.</h3>
+      <div class="login">
+        <a class="btn btn-success btn-lg" href="/login" role="button">Login as Admin</a>    
       </div>
-      <% if (user.isAuthenticated) { %>
-        <h3>Active Profiles</h3>
-        <table id="profile-list" class="table table-hover">
-          <tbody>
-            <% for(var i=0; i < profiles.length; i++) { %>
-              <tr data-id="<%= profiles[i].id %>">
-                <td><img src="<%= profiles[i].photo %>"></td>
-                <td><%= profiles[i].name %></td>
-              </tr>
-            <% } %>
-          </tbody>
-        </table>      
-      <% } %>
-    </div>
-    <script>
-      $(document).ready(() => {
-        $("#profile-list >tbody >tr").each((index, element) => {
-          console.log(element);
-          $(element).click((e, elem) => {
-            window.location.href = "/profile/" + $(e.delegateTarget).data("id");
-          })
-        })
-      });
-    </script>
-  </body>
-</html>
+    <% } %>
+  </div>
+  <% if (user.isAuthenticated) { %>
+    <h3>Active Profiles</h3>
+    <table id="profile-list" class="table table-hover">
+      <tbody>
+        <% for(var i=0; i < profiles.length; i++) { %>
+          <tr data-id="<%= profiles[i].id %>">
+            <td><img src="<%= profiles[i].photo %>"></td>
+            <td><%= profiles[i].name %></td>
+          </tr>
+        <% } %>
+      </tbody>
+    </table>      
+  <% } %>
+</div>
+<script>
+  $(document).ready(() => {
+    $("#profile-list >tbody >tr").each((index, element) => {
+      console.log(element);
+      $(element).click((e, elem) => {
+        window.location.href = "/profile/" + $(e.delegateTarget).data("id");
+      })
+    })
+  });
+</script>
+
+<% include ../views/partials/footer %>
