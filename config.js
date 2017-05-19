@@ -23,7 +23,7 @@ exports.creds = {
 };
 
 exports.resourceURL = 'https://graph.windows.net';
-exports.destroySessionUrl = 'https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri=http://localhost:3000';
+exports.destroySessionUrl = process.env.DestroySessionUrl || 'https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri=http://localhost:3000';
 exports.useMongoDBSessionStore = true;
 exports.databaseUri = process.env.DataStore || 'mongodb://missingchildrendata:agHqTdTA7xaIlSEnaVU63O0sFCnrSZuZHYcBLLoUgeyPCYC5qYSSFca7eMGbqRFmPaAPeaakJmMxYSy0OvxHog==@missingchildrendata.documents.azure.com:10250/king?ssl=true&sslverifycertificate=false';
 exports.mongoDBSessionMaxAge = 24 * 60 * 60;
