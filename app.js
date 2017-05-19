@@ -182,4 +182,4 @@ app.put('/api/notify', ensureAuthenticated, function (req, res) {
   res.end(200);
 })
 
-app.listen(process.env.port || 3000);
+app.listen(config.Port);
