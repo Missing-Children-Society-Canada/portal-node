@@ -89,11 +89,11 @@ function getFacebookHandleFromEvent(event) {
     return null;
 }
 
-function assignIfNotNull(object, parameter, value, replace = true) {
-    if (value != null && value !== "" && replace === true) {
-        object[parameter] = value;
-    }
-}
+// function assignIfNotNull(object, parameter, value, replace = true) {
+//     if (value != null && value !== "" && replace === true) {
+//         object[parameter] = value;
+//     }
+// }
 
 function getProfiles() {
     return new Promise(function(resolve, reject) {
