@@ -182,4 +182,9 @@ app.get('/api/profile', ensureAuthenticated, function (req, res) {
   res.end(JSON.stringify(data));
 })
 
+app.get('/api/profiles', ensureAuthenticated, function (req, res) {
+  let data = { HowMany: 100 };
+  res.end(JSON.stringify(data));
+})
+
 app.listen(config.Port);
