@@ -49,7 +49,7 @@
         <table id="profile-list" class="table table-hover">
           <tbody>
             <% for(var i=0; i < profiles.length; i++) { %>
-              <tr>
+              <tr data-id="<%= profiles[i].id %>">
                 <td><img src="<%= profiles[i].photo %>"></td>
                 <td><%= profiles[i].name %></td>
               </tr>
@@ -61,8 +61,9 @@
     <script>
       $(document).ready(() => {
         $("#profile-list >tbody >tr").each((index, element) => {
-          console.log("here");
-          $(element).click(() => {            
+          console.log(element);
+          $(element).click((e, elem) => {
+            window.location.href = "/profile/" + $(e.delegateTarget).data("id");
           })
         })
       });
