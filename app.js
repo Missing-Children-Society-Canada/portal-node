@@ -9,12 +9,9 @@ var passport = require('passport');
 var util = require('util');
 var bunyan = require('bunyan');
 var config = require('./config');
-var mu2 = require('mu2');
 
 // Controllers
 var profiles = require('./controllers/profilesController');
-
-mu2.root = __dirname + '/views';
 
 var MongoStore = require('connect-mongo')(expressSession);
 var mongoose = require('mongoose');
@@ -89,9 +86,12 @@ passport.use(new OIDCStrategy({
 ));
 
 var app = express();
+app.set('view engine', 'ejs');
 app.use(express.logger());
 app.use(methodOverride());
 app.use(cookieParser());
+app.use('/img', express.static(__dirname + '/img'));
+app.use('/css', express.static(__dirname + '/css'));
 
 // set up session middleware
 if (config.useMongoDBSessionStore) {
@@ -171,8 +171,11 @@ app.get('/logout', function (req, res) {
 
 // APP
 app.get('/', function (req, res) {
-  var htmlStream = mu2.compileAndRender('index.html', { ip: req.ip });
-  htmlStream.pipe(res);
+  res.render('index', {
+    user: {
+      isAuthenticated: req.isAuthenticated()
+    }
+  });
 });
 
 

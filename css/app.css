@@ -1,0 +1,27 @@
+/*media all*/
+body {
+    font-family: "Roboto","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    line-height: 1.4285;
+    color: #8d8d8d;
+    background-color: #e4e4e4;
+}
+
+.home > .jumbotron {
+  background: black;
+  background:url(https://s3-us-west-2.amazonaws.com/mcsc-media-library/site-images/homepage-bg.jpg);
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-attachment:fixed;
+  background-position:center center;
+  color: white;
+}
+
+.home > .jumbotron  a {
+  color: white;
+}
+
+
+.home > .jumbotron div.login {
+  margin: 50px 0 0 0;
+}
