@@ -11,7 +11,6 @@ var bunyan = require('bunyan');
 var mongoose = require('mongoose');
 var config = require('./config');
 var ProfileApi = require('./apis/profiles');
-var User = require('./models/user');
 
 // Controllers
 var profiles = require('./controllers/profilesController');
@@ -124,9 +123,9 @@ app.get('/login',
   function (req, res, next) {
     passport.authenticate('azuread-openidconnect',
       {
+        session: false,
         response: res,                      // required
         resourceURL: config.resourceURL,    // optional. Provide a value if you want to specify the resource.
-        customState: 'my_state',            // optional. Provide a value if you want to provide custom state value.
         failureRedirect: '/'
       }
     )(req, res, next);
@@ -173,18 +172,17 @@ app.get('/logout', function (req, res) {
 
 // APP
 app.get('/', function (req, res) {
-  var user = new User(req);
-  if (user.isAuthenticated) {
+  if (req.isAuthenticated()) {
     new ProfileApi(config.docDB).getList().then((profiles) => {
       res.render('index', {
-        user: user,
+        user: req.user,
         profiles: profiles
       });      
     })
   }
   else {
     res.render('index', {
-        user: user
+        user: req.user
     });    
   }
 });

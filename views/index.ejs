@@ -4,14 +4,14 @@
   <div class="jumbotron">
     <img src="img/mcsc-logo.png">
     <h2>Person Finder App</h2>
-    <% if (!user.isAuthenticated) { %>
+    <% if (!user) { %>
       <h3>To request access please contact <a href="https://mcsc.ca/">Missing Children Society of Canada</a>.</h3>
       <div class="login">
         <a class="btn btn-success btn-lg" href="/login" role="button">Login as Admin</a>    
       </div>
     <% } %>
   </div>
-  <% if (user.isAuthenticated) { %>
+  <% if (user) { %>
     <h3>Active Profiles</h3>
     <table id="profile-list" class="table table-hover">
       <thead>
