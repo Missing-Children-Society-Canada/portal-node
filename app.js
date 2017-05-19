@@ -187,4 +187,8 @@ app.get('/api/profiles', ensureAuthenticated, function (req, res) {
   res.end(JSON.stringify(data));
 })
 
+app.put('/api/notify', ensureAuthenticated, function (req, res) {
+  res.end(200);
+})
+
 app.listen(config.Port);
