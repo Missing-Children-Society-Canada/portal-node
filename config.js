@@ -28,3 +28,9 @@ exports.useMongoDBSessionStore = true;
 exports.databaseUri = process.env.DataStore || 'mongodb://missingchildrendata:agHqTdTA7xaIlSEnaVU63O0sFCnrSZuZHYcBLLoUgeyPCYC5qYSSFca7eMGbqRFmPaAPeaakJmMxYSy0OvxHog==@missingchildrendata.documents.azure.com:10250/king?ssl=true&sslverifycertificate=false';
 exports.mongoDBSessionMaxAge = 24 * 60 * 60;
 exports.Port = process.env.PORT || 3000;
+
+// Configuration required for DocumentDB
+exports.docDB = {
+  Host: process.env.DocDb_Host,
+  AuthKey: process.env.DocDb_AuthKey
+};

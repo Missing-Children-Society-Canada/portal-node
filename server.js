@@ -174,7 +174,7 @@ app.get('/logout', function (req, res) {
 app.get('/', function (req, res) {
   var authenticated = req.isAuthenticated();
   if (authenticated) {
-    new ProfileApi().getList().then((profiles) => {
+    new ProfileApi(config.docDB).getList().then((profiles) => {
       console.log(profiles.length);
       res.render('index', {
         user: {

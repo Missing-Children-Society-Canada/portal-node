@@ -1,12 +1,11 @@
 'use strict';
+var assign = require('object-assign');
 var DocumentDBClient = require('documentdb').DocumentClient;
 
-var Profile = function() {
-  this.config = {
-      CollLink: 'dbs/reporting/colls/events',
-      Host: process.env.DocDb_Host,
-      AuthKey: process.env.DocDb_AuthKey,
-  };
+var Profile = function(config) {
+  this.config = Object.assign({
+    CollLink: 'dbs/reporting/colls/events',
+    }, config);
 }
 
 // Gets the full name from the event
