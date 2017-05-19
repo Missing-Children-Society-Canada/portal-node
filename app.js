@@ -182,4 +182,4 @@ app.get('/api/profile', ensureAuthenticated, function (req, res) {
   res.end(JSON.stringify(data));
 })
 
-app.listen(3000);
+app.listen(config.Port);
