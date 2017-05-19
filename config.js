@@ -1,17 +1,17 @@
 
 exports.creds = {
-  identityMetadata: process.env.AADTenant || 'https://login.microsoftonline.com/6044a321-e0b8-4797-8651-e2722761fad9/.well-known/openid-configuration', 
-  clientID: process.env.AADClient_ID || '08db5440-cada-4a70-a224-a2b8024d2cab',
+  identityMetadata: process.env.AADTenant,
+  clientID: process.env.AADClient_ID,
   responseType: 'code id_token',
   responseMode: 'form_post',
-  redirectUrl: process.env.RedirectUrl || 'http://localhost:3000/auth/openid/return',
+  redirectUrl: process.env.RedirectUrl,
   allowHttpForRedirectUrl: true,
-  clientSecret: process.env.ClientSecret || 'o9hfEmFr5NzAeHvPWJNkR2q',
+  clientSecret: process.env.ClientSecret,
   validateIssuer: true,
   issuer: null,
   passReqToCallback: false,
   useCookieInsteadOfSession: true,
-  cookieEncryptionKeys: [ 
+  cookieEncryptionKeys: [
     { 'key': '12345678901234567890123456789012', 'iv': '123456789012' },
     { 'key': 'abcdefghijklmnopqrstuvwxyzabcdef', 'iv': 'abcdefghijkl' }
   ],
