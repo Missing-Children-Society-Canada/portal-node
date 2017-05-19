@@ -9,6 +9,7 @@ var passport = require('passport');
 var util = require('util');
 var bunyan = require('bunyan');
 var config = require('./config');
+var ProfileApi = require('./apis/profiles');
 
 // Controllers
 var profiles = require('./controllers/profilesController');
@@ -171,16 +172,30 @@ app.get('/logout', function (req, res) {
 
 // APP
 app.get('/', function (req, res) {
-  res.render('index', {
-    user: {
-      isAuthenticated: req.isAuthenticated()
-    }
-  });
+  var authenticated = req.isAuthenticated();
+  if (authenticated) {
+    new ProfileApi().getList().then((profiles) => {
+      console.log(profiles.length);
+      res.render('index', {
+        user: {
+          isAuthenticated: authenticated
+        },
+        profiles: profiles
+      });      
+    })
+  }
+  else {
+    res.render('index', {
+      user: {
+        isAuthenticated: authenticated
+      }
+    });    
+  }
 });
 
 
 // APIS
-app.get('/profiles', ensureAuthenticated, profiles.list);
+app.get('/api/profiles', ensureAuthenticated, profiles.list);
 app.put('/api/notify', ensureAuthenticated, function (req, res) {
   res.end(200);
 })

@@ -25,3 +25,7 @@ body {
 .home > .jumbotron div.login {
   margin: 50px 0 0 0;
 }
+
+.home > #profile-list img {
+  width: 100px;
+}
