@@ -1,20 +1,20 @@
 'use strict';
-var ProfileApi = require('../apis/profiles');
 var User = require('../models/user');
+var config = require('../config');
+var ProfileApi = require('../apis/profiles');
 
 exports.list = function(req, res){
-  var profiles = new ProfileApi().getList().then(function(profiles) {
+  new ProfileApi.getList(config.docDB).then(function(profiles) {
     res.json(profiles);
   });
 };
 
 exports.show = function(req, res) {
-    var user = new User(req);  
+  var user = new User(req);
+  new ProfileApi(config.docDB).get(req.params.id).then((profile) => {
     res.render('profiles/show', {
-        user: user,
-        profile: {
-        id: 123,
-        name: "test",
-        photo: "shit"
-    }});
+      user: user,
+      profile: profile
+    });
+  }); 
 }

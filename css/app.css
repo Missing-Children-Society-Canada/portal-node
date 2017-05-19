@@ -7,7 +7,7 @@ body {
     background-color: #e4e4e4;
 }
 
-.home > .jumbotron {
+.home > .jumbotron, .profile > .jumbotron {
   background: black;
   background:url(https://s3-us-west-2.amazonaws.com/mcsc-media-library/site-images/homepage-bg.jpg);
   background-repeat:no-repeat;
@@ -28,4 +28,9 @@ body {
 
 .home > #profile-list img {
   width: 100px;
+}
+
+/* Profile */
+.profile .jumbotron img {
+  width: 400px;
 }

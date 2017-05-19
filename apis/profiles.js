@@ -2,7 +2,7 @@
 var DocumentDBClient = require('documentdb').DocumentClient;
 
 var Profile = function(config) {
-  this.config = Object.assign({
+  this.config = Object.assign({}, {
     CollLink: 'dbs/reporting/colls/events',
     }, config);
 }
@@ -134,6 +134,45 @@ Profile.prototype.getList = function() {
           }
 
           resolve(profileArray);
+      });
+    });
+}
+
+Profile.prototype.get = function(id) {
+    return new Promise((resolve, reject) => {
+      let data = [];
+      const docDbClient = new DocumentDBClient(this.config.Host, { masterKey: this.config.AuthKey });
+      const query = 'SELECT * FROM c WHERE c.response.type =\'profile\' AND c.user.id = \'' + id + '\' ORDER BY c.triggeredOn DESC';
+      const options = {
+          enableCrossPartitionQuery: true
+      }
+      console.log(query);
+      docDbClient.queryDocuments(this.config.CollLink, query, options).toArray((err, results) => {
+          let profile = null;
+          results.forEach((event) => {
+              let userid = event.user.id;
+              let p = profile || {
+                  id: userid,
+                  eventCount: 0,
+                  mostRecentPlatform: event.response.platform,
+                  triggeredOn: event.triggeredOn,
+                  name: this.getNameFromEvent(event),
+                  photo: this.getUserPhotoFromEvent(event),
+                  birthday: null,
+                  social: {}
+              };
+              p.eventCount++;
+
+              this.assignIfNotNull(p, 'gender', this.getUserGenderFromEvent(event));
+              this.assignIfNotNull(p, 'birthday', this.getUserBirthdayFromEvent(event));
+              this.assignIfNotNull(p.social, 'twitter', this.getTwitterHandleFromEvent(event));
+              this.assignIfNotNull(p.social, 'instagram', this.getInstagramHandleFromEvent(event));
+              this.assignIfNotNull(p.social, 'facebook', this.getFacebookHandleFromEvent(event));
+
+              profile = p;
+          });
+
+          resolve(profile);
       });
     });
 }
