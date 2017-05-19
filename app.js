@@ -37,6 +37,9 @@ var util = require('util');
 var bunyan = require('bunyan');
 var config = require('./config');
 
+// routes
+var profiles = require('./routes/profiles');
+
 // set up database for express session
 var MongoStore = require('connect-mongo')(expressSession);
 var mongoose = require('mongoose');
@@ -75,7 +78,6 @@ var users = [];
 var findByOid = function (oid, fn) {
   for (var i = 0, len = users.length; i < len; i++) {
     var user = users[i];
-    log.info('we are using user: ', user);
     if (user.oid === oid) {
       return fn(null, user);
     }
@@ -197,10 +199,7 @@ app.get('/', function (req, res) {
   res.render('index', { user: req.user });
 });
 
-app.get('/profiles', ensureAuthenticated, function (req, res) {
-  let data = { happy: 'fun' };
-  res.end(JSON.stringify(data));
-})
+app.get('/profiles', ensureAuthenticated, profiles.list);
 
 // '/account' is only available to logged in user
 app.get('/account', ensureAuthenticated, function (req, res) {
@@ -267,5 +266,5 @@ app.get('/logout', function (req, res) {
   });
 });
 
-app.listen(3000);
+app.listen(process.env.port || 3000);
 
