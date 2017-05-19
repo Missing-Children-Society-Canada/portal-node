@@ -27,3 +27,4 @@ exports.destroySessionUrl = 'https://login.microsoftonline.com/common/oauth2/log
 exports.useMongoDBSessionStore = true;
 exports.databaseUri = process.env.DataStore || 'mongodb://missingchildrendata:agHqTdTA7xaIlSEnaVU63O0sFCnrSZuZHYcBLLoUgeyPCYC5qYSSFca7eMGbqRFmPaAPeaakJmMxYSy0OvxHog==@missingchildrendata.documents.azure.com:10250/king?ssl=true&sslverifycertificate=false';
 exports.mongoDBSessionMaxAge = 24 * 60 * 60;
+exports.Port = process.env.Port || 3000;
