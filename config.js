@@ -33,3 +33,14 @@ exports.docDB = {
   Host: process.env.DocDb_Host,
   AuthKey: process.env.DocDb_AuthKey
 };
+
+// Validate Config
+var validateConfig = function(config, envKey, messageIfNotFound) {
+  if (!config) {
+    console.log(messageIfNotFound ? messageIfNotFound : "Error: process.env." + envKey + " not set, please set or see config.js.");
+    process.exit(-1);
+  }
+}
+
+validateConfig(exports.docDB.Host, "DocDb_Host");
+validateConfig(exports.config.docDB.AuthKey, "DocDb_AuthKey");
