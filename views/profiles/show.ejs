@@ -3,8 +3,28 @@
 <div class="container profile">
   <div class="jumbotron">
     <h2><%= profile.name %></h2>
+    <h2 id=profileId hidden="true"><%= profile.id %></h2>
     <img src="<%= profile.photo %>">
   </div>
+ <div>
+  <% if (user) { %>
+ <div class="container">
+   <form>
+     <input id="sendEmail" type="email" required="true">
+     <button id="sendBtn">Send Details</button>
+        <div id="email-sent-success" class="alert alert-success alert-dismissable" hidden="true">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            Success! Profile details sent to 
+        </div>
+        <div id="email-sent-failed" class="alert alert-failure alert-dismissable" hidden="true">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            Failure! Profile details not sent to 
+        </div>
+  </form>
+    <div id="response"></div>
+ </div>
+  <% } %>
+  <div>
     <table class="table table-user-information">
       <tbody>
          <% if (profile.triggeredOn) { %>
@@ -55,8 +75,47 @@
         <% } %>
       </tbody>
     </table> 
+  </div>
 </div>
 <script>
+  $("#sendBtn").click(function(){
+    var id = document.getElementById("profileId").value
+    var sendEmail = document.getElementById("sendEmail").value
+    /*
+    var d = 
+    {
+      email : sendEmail,
+      userid: id
+    };
+    if (sendEmail != null && sendEmail != "")
+    {
+      $.ajax({
+        type: "POST",
+        url: 'http://localhost:3000/api/notify',
+        data: d,
+        success: function(res) {
+            $(".result").html(res);    
+        },
+        error: function(err) {
+            $(".result").html(err); 
+        }
+      })
+      }
+    }*/
+      var success = true;
+      if (success)
+      {
+        var div = document.getElementById('email-sent-success');
+        div.innerHTML = div.innerHTML + email;
+        $("#email-sent-success").show();
+      }
+      else 
+      {
+        var div = document.getElementById('email-sent-failed');
+        div.innerHTML = div.innerHTML + email;
+        $("#email-sent-failed").show();
+      }
+    });
   $(document).ready(() => {
   });
 </script>
