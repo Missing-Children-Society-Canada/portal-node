@@ -5,6 +5,56 @@
     <h2><%= profile.name %></h2>
     <img src="<%= profile.photo %>">
   </div>
+    <table class="table table-user-information">
+      <tbody>
+         <% if (profile.triggeredOn) { %>
+        <tr>
+          <td>Date Triggered:</td>
+          <td><%= profile.triggeredOn %></td>
+        </tr>
+        <% } %>
+        <% if (profile.birthday) { %>
+        <tr>
+          <td>Date of Birth:</td>
+          <td><%= profile.birthday %></td>
+        </tr>
+        <% } %>
+        <% if (profile.gender) { %>
+        <tr>
+          <td>Gender:</td>
+          <td><%= profile.gender %></td>
+        </tr>
+        <% } %>
+        <% if (profile.email) { %>
+        <tr>
+          <td>Email</td>
+          <td><a href="mailto:<%= profile.email %>"><%= profile.email %></a></td>
+        </tr>
+        <% } %>
+        <% if (profile.phonenumber) { %>
+        <tr>
+          <td>Phone Number</td>
+          <td><%= profile.email %></td>
+        </tr>
+         <% } %>
+        <% if (profile.social) { %>
+        <tr>
+          <td>Social</td>
+          <td>
+          <% if (profile.social.twitter) { %>
+            <a href="https://twitter.com/<%= profile.social.twitter %>" class="fa fa-twitter">Twitter</a><br>
+          <% } %>
+           <% if (profile.social.instagram) { %>
+            <a href="https://instagram.com/<%= profile.social.instagram %>" class="fa fa-instagram">Instagram</a><br>
+          <% } %>
+          <% if (profile.social.facebook) { %>
+            <a href="https://facebook.com/<%= profile.social.facebook %>" class="fa fa-facebook">Facebook</a><br>
+          <% } %>
+          </td>
+        </tr>
+        <% } %>
+      </tbody>
+    </table> 
 </div>
 <script>
   $(document).ready(() => {
