@@ -178,13 +178,13 @@ app.get('/', function (req, res) {
       res.render('index', {
         user: req.user,
         profiles: profiles
-      });      
+      });
     })
   }
   else {
     res.render('index', {
-        user: req.user
-    });    
+      user: req.user
+    });
   }
 });
 

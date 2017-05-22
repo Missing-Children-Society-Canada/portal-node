@@ -1,4 +1,5 @@
 'use strict';
+
 var DocumentDBClient = require('documentdb').DocumentClient;
 
 var Profile = function(config) {
