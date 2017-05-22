@@ -9,34 +9,44 @@
  <div>
   <% if (user) { %>
  <div class="container">
-   <form>
+   <form class="pull-right">
      <input id="sendEmail" type="email" required="true">
-     <button id="sendBtn">Send Details</button>
+     <button id="sendBtn">Email Report</button>
         <div id="email-sent-success" class="alert alert-success alert-dismissable" hidden="true">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            Success! Profile details sent to 
+            Success! Profile details sent to
         </div>
         <div id="email-sent-failed" class="alert alert-failure alert-dismissable" hidden="true">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            Failure! Profile details not sent to 
+            Failure! Profile details not sent to
         </div>
-  </form>
+    </form>
     <div id="response"></div>
  </div>
   <% } %>
   <div>
-    <table class="table table-user-information">
+    <table class="table table-hover table-user-information">
       <tbody>
-         <% if (profile.triggeredOn) { %>
+        <% if (profile.name) { %>
+        <tr>
+          <td>Name:</td>
+          <td><%= profile.name %></td>
+        </tr>
+        <% } %>
+        <% if (profile.triggeredOn) { %>
         <tr>
           <td>Date Triggered:</td>
-          <td><%= profile.triggeredOn %></td>
+          <td><%= profile.triggeredOn.toLocaleString() %></td>
         </tr>
         <% } %>
         <% if (profile.birthday) { %>
         <tr>
           <td>Date of Birth:</td>
-          <td><%= profile.birthday %></td>
+          <td><%= profile.birthday.toLocaleDateString() %></td>
+        </tr>
+        <tr>
+          <td>Age:</td>
+          <td><%= profile.age %></td>
         </tr>
         <% } %>
         <% if (profile.gender) { %>
@@ -61,15 +71,26 @@
         <tr>
           <td>Social</td>
           <td>
-          <% if (profile.social.twitter) { %>
-            <a href="https://twitter.com/<%= profile.social.twitter %>" class="fa fa-twitter">Twitter</a><br>
-          <% } %>
-           <% if (profile.social.instagram) { %>
-            <a href="https://instagram.com/<%= profile.social.instagram %>" class="fa fa-instagram">Instagram</a><br>
-          <% } %>
-          <% if (profile.social.facebook) { %>
-            <a href="https://facebook.com/<%= profile.social.facebook %>" class="fa fa-facebook">Facebook</a><br>
-          <% } %>
+            <ul class="social-list">
+            <% if (profile.social.twitter) { %>
+              <li>
+                <a href="https://twitter.com/<%= profile.social.twitter %>" class="fa fa-twitter">Twitter</a>
+                <% if(profile.mostRecentPlatform === 'twitter') { %> <em>* Most recently used. <% } %>
+              </li>
+            <% } %>
+            <% if (profile.social.instagram) { %>
+              <li>
+                <a href="https://instagram.com/<%= profile.social.instagram %>" class="fa fa-instagram">Instagram</a>
+                <% if(profile.mostRecentPlatform === 'instagram') { %> <em>* Most recently used. <% } %>
+              </li>
+            <% } %>
+            <% if (profile.social.facebook) { %>
+              <li>
+                <a href="https://facebook.com/<%= profile.social.facebook %>" class="fa fa-facebook">Facebook</a>
+                <% if(profile.mostRecentPlatform === 'facebook') { %> <em>* Most recently used. <% } %>
+              </li>
+            <% } %>
+            <ul>
           </td>
         </tr>
         <% } %>

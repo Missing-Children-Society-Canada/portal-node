@@ -34,3 +34,9 @@ body {
 .profile .jumbotron img {
   width: 400px;
 }
+
+.profile .social-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}

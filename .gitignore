@@ -52,3 +52,6 @@ src/app/**/*.js.map
 
 .vscode
 dist
+
+# Developer Config
+dev.config.js

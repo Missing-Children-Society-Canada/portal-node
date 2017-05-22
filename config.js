@@ -43,4 +43,4 @@ var validateConfig = function(config, envKey, messageIfNotFound) {
 }
 
 validateConfig(exports.docDB.Host, "DocDb_Host");
-validateConfig(exports.config.docDB.AuthKey, "DocDb_AuthKey");
+validateConfig(exports.docDB.AuthKey, "DocDb_AuthKey");

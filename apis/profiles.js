@@ -39,11 +39,11 @@ Profile.prototype.getUserPhotoFromEvent = function(event) {
 // Gets the users birthday from the event
 Profile.prototype.getUserBirthdayFromEvent = function(event) {
     if (event.response.platform.toLowerCase() === 'facebook') {
-        return event.response.data.birthday;
+        return new Date(event.response.data.birthday);
     }
 
     if (event.user && event.user.facebook && event.user.facebook.birthday) {
-        return event.user.facebook.birthday;
+        return new Date(event.user.facebook.birthday);
     }
 
     return null;
@@ -109,7 +109,7 @@ Profile.prototype.getList = function() {
                   id: userid,
                   eventCount: 0,
                   mostRecentPlatform: event.response.platform,
-                  triggeredOn: event.triggeredOn,
+                  triggeredOn: new Date(event.triggeredOn),
                   name: this.getNameFromEvent(event),
                   photo: this.getUserPhotoFromEvent(event),
                   birthday: null,
@@ -169,9 +169,17 @@ Profile.prototype.get = function(id) {
               this.assignIfNotNull(p.social, 'instagram', this.getInstagramHandleFromEvent(event));
               this.assignIfNotNull(p.social, 'facebook', this.getFacebookHandleFromEvent(event));
 
+              // calculate age (source: http://stackoverflow.com/questions/4060004/calculate-age-in-javascript)
+              if (p.birthday) {
+                var ageDifMs = Date.now() - p.birthday.getTime();
+                var ageDate = new Date(ageDifMs); // miliseconds from epoch
+                p.age = Math.abs(ageDate.getUTCFullYear() - 1970);
+              }
               profile = p;
           });
-
+          console.log("=================================================");
+          console.log(JSON.stringify(profile, null, 4));
+          console.log("=================================================");
           resolve(profile);
       });
     });
