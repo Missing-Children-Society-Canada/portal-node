@@ -144,7 +144,7 @@
         </thead>
         <tbody>
           <% for(var i=0; i < profile.social.twitter.status.length; i++) { %>
-            <% let status = profile.social.twitter.status[i] %>
+            <% var status = profile.social.twitter.status[i] %>
             <tr>
               <td><a href="https://twitter.com/<%=profile.social.twitter.handle%>/status/<%=status.id_str%>" target="_blank"><span class="glyphicon glyphicon-link"></span></a></td>
               <td><h6><%= status.createdAd.toLocaleString() %></h6></td>
@@ -177,7 +177,7 @@
         </thead>
         <tbody>
           <% for(var i=0; i < profile.social.facebook.posts.length; i++) { %>
-            <% let post = profile.social.facebook.posts[i] %>
+            <% var post = profile.social.facebook.posts[i] %>
             <tr>
               <td><a href="https://facebook.com/<%=profile.social.facebook.profile%>/posts/<%=post.id.split('_')[1]%>" target="_blank"><span class="glyphicon glyphicon-link"></span></a></td>
               <td><h6><%= post.created_time.toLocaleString() %></h6></td>
