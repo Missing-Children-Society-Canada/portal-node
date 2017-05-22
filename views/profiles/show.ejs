@@ -120,11 +120,17 @@
   </div>
 </div>
 </div>
-   
-    <!-- TWITTER -->
+    <div class="tab-content"> <ul class="nav nav-tabs">
+        <% if (profile.social.twitter.status) { %>
+        <li class="nav active"><a href="#Twitter" data-toggle="tab"><h3><i class="fa fa-twitter-square" aria-hidden="true"></i> Recent Tweets</h3></a></li>
+        <% } if (profile.social.facebook.posts) { %>
+        <li class="nav"><a href="#Facebook" data-toggle="tab"><h3><i class="fa fa-facebook-square" aria-hidden="true"></i> Recent Posts</h3></a></li>
+          <% } %>
+    </ul>
+           <!-- TWITTER -->
     <% if (profile.social.twitter.status) { %>
-    <div>
-      <h3><i class="fa fa-twitter-square" aria-hidden="true"></i> Recent Tweets</h3>
+        <div class="tab-pane fade in active" id="Twitter">
+      
       <table id="recent-tweets" class="table table-hover table-user-information">
         <thead>
           <tr>
@@ -151,11 +157,10 @@
       </table>
     </div>
   <% } %>
-
-    <!-- FACEBOOK -->
+           <!-- FACEBOOK -->
     <% if (profile.social.facebook.posts) { %>
-    <div>
-      <h3><i class="fa fa-facebook-square" aria-hidden="true"></i> Recent Posts</h3>
+        <div class="tab-pane fade" id="Facebook">
+   
       <table id="recent-fb-posts" class="table table-hover table-user-information">
         <thead>
           <tr>
@@ -176,6 +181,10 @@
       </table>
     </div>
   <% } %>
+    </div>
+   
+
+   
 
 </div>
 <script>
