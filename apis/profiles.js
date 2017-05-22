@@ -108,6 +108,7 @@ Profile.prototype.getList = function() {
               let profile = profiles[userid] || {
                   id: userid,
                   eventCount: 0,
+
                   mostRecentPlatform: event.response.platform,
                   triggeredOn: new Date(event.triggeredOn),
                   name: this.getNameFromEvent(event),
@@ -127,6 +128,38 @@ Profile.prototype.getList = function() {
               this.assignIfNotNull(profile.social.twitter, 'handle', this.getTwitterHandleFromEvent(event));
               this.assignIfNotNull(profile.social.instagram, 'handle', this.getInstagramHandleFromEvent(event));
               this.assignIfNotNull(profile.social.facebook, 'profile', this.getFacebookHandleFromEvent(event));
+
+              if (event.response.platform === "twitter") {
+                let data = event.response.data;
+                if (!profile.social.twitter.status) {
+                    profile.social.twitter.status = [];
+                }
+                // Do we already have this status?
+                var uniqueStatus = true;
+                profile.social.twitter.status.forEach((status) => {
+                    if (status.id === data.status.id) {
+                        uniqueStatus = false;
+                        return;
+                    }
+                });
+                if (uniqueStatus) {
+                    profile.social.twitter.status.push({
+                        id: data.status.id,
+                        id_str: data.status.id_str,
+                        text: data.status.text,
+                        createdAd: new Date(data.status.created_at),
+                        // Source is a link to download the app, we don't need that
+                        source: data.status.source.replace(/<[^>]*>/g, ""),
+                        geo: data.status.geo,
+                        coordinates: data.status.coordinates,
+                        place: {
+                            type: data.status.place ? data.status.place.place_type : null,
+                            name: data.status.place ? data.status.place.full_name : null,
+                            country: data.status.place ? data.status.place.country : null
+                        }
+                    });
+                }
+              }
 
               // calculate age (source: http://stackoverflow.com/questions/4060004/calculate-age-in-javascript)
               if (profile.birthday) {
@@ -155,6 +188,7 @@ Profile.prototype.get = function(id) {
         this.getList().then((profiles) => {
             profiles.forEach((profile) => {
                 if (profile.id === id) {
+                    console.log(JSON.stringify(profile, null, 4));
                     resolve(profile);
                 }
             });

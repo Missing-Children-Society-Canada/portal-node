@@ -25,6 +25,7 @@
  </div>
   <% } %>
   <div>
+    <h3>Profile</h3>
     <table class="table table-hover table-user-information">
       <tbody>
         <% if (profile.name) { %>
@@ -95,8 +96,37 @@
         </tr>
         <% } %>
       </tbody>
-    </table> 
+    </table>
   </div>
+    <% if (profile.social.twitter.status) { %>
+    <div>
+      <h3>Recent Tweets</h3>
+      <table id="recent-tweets" class="table table-hover table-user-information">
+        <thead>
+          <tr>
+            <th>Tweet</th>
+            <th>Date/Time</th>
+            <th>Source</th>
+            <th>Geo</th>
+            <th>Coordinates</th>
+            <th>Place</th>
+        </thead>
+        <tbody>
+          <% for(var i=0; i < profile.social.twitter.status.length; i++) { %>
+            <% let status = profile.social.twitter.status[i] %>
+            <tr data-href="https://twitter.com/<%=profile.social.twitter.handle%>/status/<%=status.id_str%>" class="tr-link">
+              <td><%= status.text %></td>
+              <td><%= status.createdAd.toLocaleString() %></td>
+              <td><%= status.source %></td>
+              <td><%= status.geo %></td>
+              <td><%= status.coordinates %></td>
+              <td><%= status.place.name ? status.place.name + " - " + status.place.country + "(" + status.place.type + ")" : "" %></td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
 </div>
 <script>
   $("#sendBtn").click(function(){
@@ -138,6 +168,9 @@
       }
     });
   $(document).ready(() => {
+    $('tr[data-href]').on("click", function() {
+        window.open($(this).data('href'), '_blank');
+    });
   });
 </script>
 
