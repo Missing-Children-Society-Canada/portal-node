@@ -68,20 +68,20 @@
                                             <ul class="social-list">
                                               <% if (profile.social.twitter.handle) { %>
                                                 <li>
-                                                  <a href="https://twitter.com/<%= profile.social.twitter.handle %>" target="_new"><i class="fa fa-twitter-square" aria-hidden="true"></i> Twitter</a>
-                                                  <% if(profile.mostRecentPlatform === 'twitter') { %> <em><i class="fa fa-info-circle" aria-hidden="true"></i> Most recently used. <% } %>
+                                                  <i class="fa fa-twitter-square" aria-hidden="true"></i> <a href="https://twitter.com/<%= profile.social.twitter.handle %>" target="_new">Twitter</a>
+                                                  <% if(profile.mostRecentPlatform === 'twitter') { %> <em><i class="fa fa-info-circle text-muted" aria-hidden="true"></i> Most recently used. <% } %>
               </li>
             <% } %>
             <% if (profile.social.instagram.handle) { %>
               <li>
-                <a href="https://instagram.com/<%= profile.social.instagram.handle %>" target="_new"><i class="fa fa-instagram" aria-hidden="true"></i> Instagram</a>
-                <% if(profile.mostRecentPlatform === 'instagram') { %> <em><i class="fa fa-info-circle" aria-hidden="true"></i> Most recently used. <% } %>
+                <i class="fa fa-instagram" aria-hidden="true"></i> <a href="https://instagram.com/<%= profile.social.instagram.handle %>" target="_new">Instagram</a>
+                <% if(profile.mostRecentPlatform === 'instagram') { %> <em><i class="fa fa-info-circle text-muted" aria-hidden="true"></i> Most recently used. <% } %>
               </li>
             <% } %>
             <% if (profile.social.facebook.profile) { %>
               <li>
-                <a href="https://facebook.com/<%= profile.social.facebook.profile %>" target="_new"><i class="fa fa-facebook-square" aria-hidden="true"></i> Facebook</a>
-                <% if(profile.mostRecentPlatform === 'facebook') { %> <em><i class="fa fa-info-circle" aria-hidden="true"></i> Most recently used. <% } %>
+                <i class="fa fa-facebook-square" aria-hidden="true"></i> <a href="https://facebook.com/<%= profile.social.facebook.profile %>" target="_new">Facebook</a>
+                <% if(profile.mostRecentPlatform === 'facebook') { %> <em><i class="fa fa-info-circle text-muted" aria-hidden="true"></i> Most recently used. <% } %>
               </li>
             <% } %>
             <ul>
