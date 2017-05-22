@@ -26,10 +26,8 @@
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
         <% if (user) { %>
-          <p class="navbar-text">Welcome
-            <%= user.displayName %>.</p>
           <form class="navbar-form navbar-right">
-            <a href="/logout" class="btn btn-success">Logout</a>
+            <a href="/logout" class="btn btn-default">logout</a>
           </form>
           <% } %>
       </div>

@@ -9,18 +9,15 @@
           </h2>
           <img src="<%= profile.photo %>" class="img-responsive">
         </div>
-        <div class="col-md-8">
-          <h3><i class="fa fa-user" aria-hidden="true"></i> Profile</h3>
-          <table class="table table-hover table-user-information">
-            <tbody>
-              <% if (profile.name) { %>
-                <tr>
-                  <td>Name:</td>
-                  <td>
-                    <%= profile.name %>
-                  </td>
-                </tr>
-                <% } %>
+        <div class="col-md-8" style="background-color: #fff">
+          <% if (profile.name) { %>
+            <h3><i class="fa fa-user" aria-hidden="true"></i>
+              <%= profile.name %>
+            </h3>
+            <% } %>
+              <table class="table table-hover table-user-information">
+                <tbody>
+
                   <% if (profile.triggeredOn) { %>
                     <tr>
                       <td>Date Triggered:</td>
@@ -92,19 +89,12 @@
           </td>
         </tr>
         <% } %>
-      </tbody>
-    </table> 
-
-  </div>
-</div>
-      
-    </div>
-    <div>
-
-      <div class="container">
-        <form class="pull-right">
-          <input id="sendEmail" type="email" required="true">
-          <button id="sendBtn">Email Report</button>
+        <tr>
+          <td></td>
+          <td>
+            <form class="pull-right form-inline">
+          <input id="sendEmail" type="email" placeholder="jane.doe@example.com" class="form-control" required="true">
+          <button id="sendBtn" class="btn btn-default">Send</button>
           <div id="email-sent-success" class="alert alert-success alert-dismissable" hidden="true">
             <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Success! Profile
             details sent to
@@ -114,11 +104,14 @@
             details not sent to
           </div>
         </form>
-        <div id="response"></div>
-      </div>
-      <div>
-       
+            </td>
+          </tr>
+      </tbody>
+    </table>
   </div>
+</div>
+</div>
+   
     <!-- TWITTER -->
     <% if (profile.social.twitter.status) { %>
     <div>
