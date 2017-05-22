@@ -113,16 +113,27 @@ Profile.prototype.getList = function() {
                   name: this.getNameFromEvent(event),
                   photo: this.getUserPhotoFromEvent(event),
                   birthday: null,
-                  social: {}
+                  social: {
+                      twitter: {},
+                      facebook: {},
+                      instagram: {}
+                  }
               };
 
               profile.eventCount++;
 
               this.assignIfNotNull(profile, 'gender', this.getUserGenderFromEvent(event));
               this.assignIfNotNull(profile, 'birthday', this.getUserBirthdayFromEvent(event));
-              this.assignIfNotNull(profile.social, 'twitter', this.getTwitterHandleFromEvent(event));
-              this.assignIfNotNull(profile.social, 'instagram', this.getInstagramHandleFromEvent(event));
-              this.assignIfNotNull(profile.social, 'facebook', this.getFacebookHandleFromEvent(event));
+              this.assignIfNotNull(profile.social.twitter, 'handle', this.getTwitterHandleFromEvent(event));
+              this.assignIfNotNull(profile.social.instagram, 'handle', this.getInstagramHandleFromEvent(event));
+              this.assignIfNotNull(profile.social.facebook, 'profile', this.getFacebookHandleFromEvent(event));
+
+              // calculate age (source: http://stackoverflow.com/questions/4060004/calculate-age-in-javascript)
+              if (profile.birthday) {
+                var ageDifMs = Date.now() - profile.birthday.getTime();
+                var ageDate = new Date(ageDifMs); // miliseconds from epoch
+                profile.age = Math.abs(ageDate.getUTCFullYear() - 1970);
+              }
 
               profiles[userid] = profile;
           });
@@ -139,49 +150,16 @@ Profile.prototype.getList = function() {
 }
 
 Profile.prototype.get = function(id) {
+    // TODO: refactor GetList to seperate profile creation, then direct query for a given profile
     return new Promise((resolve, reject) => {
-      let data = [];
-      const docDbClient = new DocumentDBClient(this.config.Host, { masterKey: this.config.AuthKey });
-      const query = 'SELECT * FROM c WHERE c.response.type =\'profile\' AND c.user.id = \'' + id + '\' ORDER BY c.triggeredOn DESC';
-      const options = {
-          enableCrossPartitionQuery: true
-      }
-      console.log(query);
-      docDbClient.queryDocuments(this.config.CollLink, query, options).toArray((err, results) => {
-          let profile = null;
-          results.forEach((event) => {
-              let userid = event.user.id;
-              let p = profile || {
-                  id: userid,
-                  eventCount: 0,
-                  mostRecentPlatform: event.response.platform,
-                  triggeredOn: event.triggeredOn,
-                  name: this.getNameFromEvent(event),
-                  photo: this.getUserPhotoFromEvent(event),
-                  birthday: null,
-                  social: {}
-              };
-              p.eventCount++;
-
-              this.assignIfNotNull(p, 'gender', this.getUserGenderFromEvent(event));
-              this.assignIfNotNull(p, 'birthday', this.getUserBirthdayFromEvent(event));
-              this.assignIfNotNull(p.social, 'twitter', this.getTwitterHandleFromEvent(event));
-              this.assignIfNotNull(p.social, 'instagram', this.getInstagramHandleFromEvent(event));
-              this.assignIfNotNull(p.social, 'facebook', this.getFacebookHandleFromEvent(event));
-
-              // calculate age (source: http://stackoverflow.com/questions/4060004/calculate-age-in-javascript)
-              if (p.birthday) {
-                var ageDifMs = Date.now() - p.birthday.getTime();
-                var ageDate = new Date(ageDifMs); // miliseconds from epoch
-                p.age = Math.abs(ageDate.getUTCFullYear() - 1970);
-              }
-              profile = p;
-          });
-          console.log("=================================================");
-          console.log(JSON.stringify(profile, null, 4));
-          console.log("=================================================");
-          resolve(profile);
-      });
+        this.getList().then((profiles) => {
+            profiles.forEach((profile) => {
+                if (profile.id === id) {
+                    resolve(profile);
+                }
+            });
+            reject("Profile not found");
+        });
     });
 }
 
