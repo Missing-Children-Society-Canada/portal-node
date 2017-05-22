@@ -93,6 +93,7 @@ app.use(methodOverride());
 app.use(cookieParser());
 app.use('/img', express.static(__dirname + '/img'));
 app.use('/css', express.static(__dirname + '/css'));
+app.use('/fonts', express.static(__dirname + '/fonts'));
 
 // set up session middleware
 if (config.useMongoDBSessionStore) {

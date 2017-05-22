@@ -25,7 +25,7 @@
  </div>
   <% } %>
   <div>
-    <h3>Profile</h3>
+    <h3><i class="fa fa-user" aria-hidden="true"></i> Profile</h3>
     <table class="table table-hover table-user-information">
       <tbody>
         <% if (profile.name) { %>
@@ -59,13 +59,13 @@
         <% if (profile.email) { %>
         <tr>
           <td>Email</td>
-          <td><a href="mailto:<%= profile.email %>"><%= profile.email %></a></td>
+          <td><a href="mailto:<%= profile.email %>"><i class="fa fa-envelope-o" aria-hidden="true"></i> <%= profile.email %></a></td>
         </tr>
         <% } %>
         <% if (profile.phonenumber) { %>
         <tr>
           <td>Phone Number</td>
-          <td><%= profile.email %></td>
+          <td><%= profile.phonenumber %></td>
         </tr>
          <% } %>
         <% if (profile.social) { %>
@@ -75,20 +75,20 @@
             <ul class="social-list">
             <% if (profile.social.twitter.handle) { %>
               <li>
-                <a href="https://twitter.com/<%= profile.social.twitter.handle %>" target="_new" class="fa fa-twitter">Twitter</a>
-                <% if(profile.mostRecentPlatform === 'twitter') { %> <em>* Most recently used. <% } %>
+                <a href="https://twitter.com/<%= profile.social.twitter.handle %>" target="_new"><i class="fa fa-twitter-square" aria-hidden="true"></i> Twitter</a>
+                <% if(profile.mostRecentPlatform === 'twitter') { %> <em><i class="fa fa-info-circle" aria-hidden="true"></i> Most recently used. <% } %>
               </li>
             <% } %>
             <% if (profile.social.instagram.handle) { %>
               <li>
-                <a href="https://instagram.com/<%= profile.social.instagram.handle %>" target="_new" class="fa fa-instagram">Instagram</a>
-                <% if(profile.mostRecentPlatform === 'instagram') { %> <em>* Most recently used. <% } %>
+                <a href="https://instagram.com/<%= profile.social.instagram.handle %>" target="_new"><i class="fa fa-instagram" aria-hidden="true"></i> Instagram</a>
+                <% if(profile.mostRecentPlatform === 'instagram') { %> <em><i class="fa fa-info-circle" aria-hidden="true"></i> Most recently used. <% } %>
               </li>
             <% } %>
             <% if (profile.social.facebook.profile) { %>
               <li>
-                <a href="https://facebook.com/<%= profile.social.facebook.profile %>" target="_new" class="fa fa-facebook">Facebook</a>
-                <% if(profile.mostRecentPlatform === 'facebook') { %> <em>* Most recently used. <% } %>
+                <a href="https://facebook.com/<%= profile.social.facebook.profile %>" target="_new"><i class="fa fa-facebook-square" aria-hidden="true"></i> Facebook</a>
+                <% if(profile.mostRecentPlatform === 'facebook') { %> <em><i class="fa fa-info-circle" aria-hidden="true"></i> Most recently used. <% } %>
               </li>
             <% } %>
             <ul>
@@ -98,9 +98,10 @@
       </tbody>
     </table>
   </div>
+    <!-- TWITTER -->
     <% if (profile.social.twitter.status) { %>
     <div>
-      <h3>Recent Tweets</h3>
+      <h3><i class="fa fa-twitter-square" aria-hidden="true"></i> Recent Tweets</h3>
       <table id="recent-tweets" class="table table-hover table-user-information">
         <thead>
           <tr>
@@ -127,6 +128,32 @@
       </table>
     </div>
   <% } %>
+
+    <!-- FACEBOOK -->
+    <% if (profile.social.facebook.posts) { %>
+    <div>
+      <h3><i class="fa fa-facebook-square" aria-hidden="true"></i> Recent Posts</h3>
+      <table id="recent-fb-posts" class="table table-hover table-user-information">
+        <thead>
+          <tr>
+            <th>Message</th>
+            <th>Story</th>
+            <th>Date/Time</th>
+        </thead>
+        <tbody>
+          <% for(var i=0; i < profile.social.facebook.posts.length; i++) { %>
+            <% let post = profile.social.facebook.posts[i] %>
+            <tr data-href="https://facebook.com/<%=profile.social.facebook.profile%>/posts/<%=post.id.split('_')[1]%>" class="tr-link">
+              <td><%= post.message %></td>
+              <td><%= post.story %></td>
+              <td><%= post.created_time.toLocaleString() %></td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+
 </div>
 <script>
   $("#sendBtn").click(function(){

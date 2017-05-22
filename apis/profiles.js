@@ -101,6 +101,71 @@ Profile.prototype.assignIfNotNull = function(object, parameter, value) {
      }
  }
 
+Profile.prototype.extractTwitterSocialInformation = function(profile, event) {
+    if (event.response.platform !== "twitter") {
+        return;
+    }
+
+    let data = event.response.data;
+    if (!profile.social.twitter.status) {
+        profile.social.twitter.status = [];
+    }
+    // Do we already have this status?
+    var uniqueStatus = true;
+    profile.social.twitter.status.forEach((status) => {
+        if (status.id === data.status.id) {
+            uniqueStatus = false;
+            return;
+        }
+    });
+    if (uniqueStatus) {
+        profile.social.twitter.status.push({
+            id: data.status.id,
+            id_str: data.status.id_str,
+            text: data.status.text,
+            createdAd: new Date(data.status.created_at),
+            // Source is a link to download the app, we don't need that
+            source: data.status.source.replace(/<[^>]*>/g, ""),
+            geo: data.status.geo,
+            coordinates: data.status.coordinates,
+            place: {
+                type: data.status.place ? data.status.place.place_type : null,
+                name: data.status.place ? data.status.place.full_name : null,
+                country: data.status.place ? data.status.place.country : null
+            }
+        });
+    }
+}
+
+Profile.prototype.extractFacebookSocialInformation = function(profile, event) {
+    if (event.response.platform !== "facebook") {
+        return;
+    }
+
+    let data = event.response.data;
+    if (!profile.social.facebook.status) {
+        profile.social.facebook.posts = [];
+    }
+    // Do we already have this post?
+    let postLookup = {};
+    profile.social.facebook.posts.forEach((post) => {
+        postLookup[post.id] = true;
+    });
+
+    data.posts.data.forEach((post) => {
+        if (!postLookup[post.id]) {
+            profile.social.facebook.posts.push({
+                id: post.id,
+                created_time: new Date(post.created_time),
+                message: post.message,
+                story: post.story
+            });
+
+            postLookup[post.id] = true;
+        }
+    });
+}
+
 Profile.prototype.getList = function() {
     return new Promise((resolve, reject) => {
       let data = [];
@@ -113,7 +178,7 @@ Profile.prototype.getList = function() {
           let profiles = {};
           results.forEach((event) => {
               let userid = event.user.id;
-              
+
               let profile = profiles[userid] || {
                   id: userid,
                   eventCount: 0,
@@ -140,35 +205,10 @@ Profile.prototype.getList = function() {
               this.assignIfNotNull(profile.social.facebook, 'profile', this.getFacebookHandleFromEvent(event));
 
               if (event.response.platform === "twitter") {
-                let data = event.response.data;
-                if (!profile.social.twitter.status) {
-                    profile.social.twitter.status = [];
-                }
-                // Do we already have this status?
-                var uniqueStatus = true;
-                profile.social.twitter.status.forEach((status) => {
-                    if (status.id === data.status.id) {
-                        uniqueStatus = false;
-                        return;
-                    }
-                });
-                if (uniqueStatus) {
-                    profile.social.twitter.status.push({
-                        id: data.status.id,
-                        id_str: data.status.id_str,
-                        text: data.status.text,
-                        createdAd: new Date(data.status.created_at),
-                        // Source is a link to download the app, we don't need that
-                        source: data.status.source.replace(/<[^>]*>/g, ""),
-                        geo: data.status.geo,
-                        coordinates: data.status.coordinates,
-                        place: {
-                            type: data.status.place ? data.status.place.place_type : null,
-                            name: data.status.place ? data.status.place.full_name : null,
-                            country: data.status.place ? data.status.place.country : null
-                        }
-                    });
-                }
+                this.extractTwitterSocialInformation(profile, event);
+              }
+              else if (event.response.platform === "facebook") {
+                this.extractFacebookSocialInformation(profile, event);
               }
 
               // calculate age (source: http://stackoverflow.com/questions/4060004/calculate-age-in-javascript)
