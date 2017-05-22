@@ -138,9 +138,9 @@
             <th><span class="glyphicon glyphicon-time"></span></th>
             <th>Tweet</th>
             <th>Source</th>
-            <th>Geo</th>
-            <th>Coordinates</th>
-            <th>Place</th>
+            <th><span class="glyphicon glyphicon-globe"></span></th>
+            <th></th>
+            <th></th>
         </thead>
         <tbody>
           <% for(var i=0; i < profile.social.twitter.status.length; i++) { %>
@@ -154,7 +154,7 @@
               <td><%= status.coordinates %></td>
               <td>
                 <% if (status.place.name) { %>
-                <a target="_blank" href="https://bing.com/maps?q=<%= status.place.name + " " + status.place.country + " " + status.place.type %>"><%= status.place.name + " - " + status.place.country + "(" + status.place.type + ")" %></a>
+                <a target="_blank" href="https://bing.com/maps?q=<%= status.place.name + " " + status.place.country + " " + status.place.type %>"><%= status.place.name + " - " + status.place.country + " (" + status.place.type + ")" %></a>
                 <% } %>
               </td>
             </tr>
