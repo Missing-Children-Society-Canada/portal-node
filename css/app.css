@@ -6,8 +6,7 @@ body {
 }
 
 .home > .jumbotron, .profile > .jumbotron {
-  background: black;
-  background:url(https://s3-us-west-2.amazonaws.com/mcsc-media-library/site-images/homepage-bg.jpg);
+  background: lightgrey;
   background-repeat:no-repeat;
   background-size:cover;
   background-attachment:fixed;
