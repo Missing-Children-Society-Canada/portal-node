@@ -42,13 +42,12 @@ body {
 }
 
 .profile h3 {
-  color: #333;
+  color: #444;
   font-weight: 600;
 }
 
 .profile em {
   font-weight: 200;
-  color: #888;
   font-style: normal;
 }
 
