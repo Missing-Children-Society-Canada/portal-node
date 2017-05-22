@@ -134,6 +134,7 @@
       <table id="recent-tweets" class="table table-hover table-user-information">
         <thead>
           <tr>
+            <th><span class="glyphicon glyphicon-link"></span></th>
             <th><span class="glyphicon glyphicon-time"></span></th>
             <th>Tweet</th>
             <th>Source</th>
@@ -144,10 +145,11 @@
         <tbody>
           <% for(var i=0; i < profile.social.twitter.status.length; i++) { %>
             <% let status = profile.social.twitter.status[i] %>
-            <tr data-href="https://twitter.com/<%=profile.social.twitter.handle%>/status/<%=status.id_str%>" class="tr-link">
+            <tr>
+              <td><a href="https://twitter.com/<%=profile.social.twitter.handle%>/status/<%=status.id_str%>" target="_blank"><span class="glyphicon glyphicon-link"></span></a></td>
               <td><h6><%= status.createdAd.toLocaleString() %></h6></td>
               <td><%= status.text %></td>
-              <td><%= status.source %></td>
+              <td><h6><%= status.source %></h6></td>
               <td><%= status.geo %></td>
               <td><%= status.coordinates %></td>
               <td><%= status.place.name ? status.place.name + " - " + status.place.country + "(" + status.place.type + ")" : "" %></td>
@@ -164,6 +166,7 @@
       <table id="recent-fb-posts" class="table table-hover table-user-information">
         <thead>
           <tr>
+            <th><span class="glyphicon glyphicon-link"></span></th>
             <th><span class="glyphicon glyphicon-time"></span></th>
             <th>Message</th>
             <th>Story</th>
@@ -171,10 +174,11 @@
         <tbody>
           <% for(var i=0; i < profile.social.facebook.posts.length; i++) { %>
             <% let post = profile.social.facebook.posts[i] %>
-            <tr data-href="https://facebook.com/<%=profile.social.facebook.profile%>/posts/<%=post.id.split('_')[1]%>" class="tr-link">
+            <tr>
+              <td><a href="https://facebook.com/<%=profile.social.facebook.profile%>/posts/<%=post.id.split('_')[1]%>" target="_blank"><span class="glyphicon glyphicon-link"></span></a></td>
               <td><h6><%= post.created_time.toLocaleString() %></h6></td>
               <td><%= post.message %></td>
-              <td><%= post.story %></td>
+              <td><h6><%= post.story %></h6></td>
             </tr>
           <% } %>
         </tbody>
@@ -182,10 +186,6 @@
     </div>
   <% } %>
     </div>
-   
-
-   
-
 </div>
 <script>
   $("#sendBtn").click(function () {
@@ -223,11 +223,6 @@
       div.innerHTML = div.innerHTML + email;
       $("#email-sent-failed").show();
     }
-  });
-  $(document).ready(() => {
-    $('tr[data-href]').on("click", function () {
-      window.open($(this).data('href'), '_blank');
-    });
   });
 </script>
 
