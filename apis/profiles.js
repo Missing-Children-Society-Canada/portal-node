@@ -58,6 +58,15 @@ Profile.prototype.getUserGenderFromEvent = function(event) {
     return null;
 }
 
+// Gets the users gender from the event
+Profile.prototype.getEmailFromEvent = function(event) {
+    if (event.user && event.user.facebook && event.user.facebook.email) {
+        return event.user.facebook.email;
+    }
+
+    return null;
+}
+
 // Gets the users twitter hande from the event
 Profile.prototype.getTwitterHandleFromEvent = function(event) {
     if (event.user && event.user.twitter && event.user.twitter.username) {
@@ -123,6 +132,7 @@ Profile.prototype.getList = function() {
 
               profile.eventCount++;
 
+              this.assignIfNotNull(profile, 'email', this.getEmailFromEvent(event));
               this.assignIfNotNull(profile, 'gender', this.getUserGenderFromEvent(event));
               this.assignIfNotNull(profile, 'birthday', this.getUserBirthdayFromEvent(event));
               this.assignIfNotNull(profile.social.twitter, 'handle', this.getTwitterHandleFromEvent(event));
