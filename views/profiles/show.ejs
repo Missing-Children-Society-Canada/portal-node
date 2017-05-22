@@ -1,82 +1,79 @@
 <% include ../../views/partials/header %>
 
-<div class="container profile">
-  <div class="jumbotron">
-    <h2><%= profile.name %></h2>
-    <h2 id=profileId hidden="true"><%= profile.id %></h2>
-    <img src="<%= profile.photo %>">
-  </div>
- <div>
-  <% if (user) { %>
- <div class="container">
-   <form class="pull-right">
-     <input id="sendEmail" type="email" required="true">
-     <button id="sendBtn">Email Report</button>
-        <div id="email-sent-success" class="alert alert-success alert-dismissable" hidden="true">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            Success! Profile details sent to
+  <div class="container profile">
+    <div class="jumbotron">
+      <div class="row">
+        <div class="col-md-4">
+          <h2 id=profileId hidden="true">
+            <%= profile.id %>
+          </h2>
+          <img src="<%= profile.photo %>" class="img-responsive">
         </div>
-        <div id="email-sent-failed" class="alert alert-failure alert-dismissable" hidden="true">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            Failure! Profile details not sent to
-        </div>
-    </form>
-    <div id="response"></div>
- </div>
-  <% } %>
-  <div>
-    <h3><i class="fa fa-user" aria-hidden="true"></i> Profile</h3>
-    <table class="table table-hover table-user-information">
-      <tbody>
-        <% if (profile.name) { %>
-        <tr>
-          <td>Name:</td>
-          <td><%= profile.name %></td>
-        </tr>
-        <% } %>
-        <% if (profile.triggeredOn) { %>
-        <tr>
-          <td>Date Triggered:</td>
-          <td><%= profile.triggeredOn.toLocaleString() %></td>
-        </tr>
-        <% } %>
-        <% if (profile.birthday) { %>
-        <tr>
-          <td>Date of Birth:</td>
-          <td><%= profile.birthday.toLocaleDateString() %></td>
-        </tr>
-        <tr>
-          <td>Age:</td>
-          <td><%= profile.age %></td>
-        </tr>
-        <% } %>
-        <% if (profile.gender) { %>
-        <tr>
-          <td>Gender:</td>
-          <td><%= profile.gender %></td>
-        </tr>
-        <% } %>
-        <% if (profile.email) { %>
-        <tr>
-          <td>Email</td>
-          <td><a href="mailto:<%= profile.email %>"><i class="fa fa-envelope-o" aria-hidden="true"></i> <%= profile.email %></a></td>
-        </tr>
-        <% } %>
-        <% if (profile.phonenumber) { %>
-        <tr>
-          <td>Phone Number</td>
-          <td><%= profile.phonenumber %></td>
-        </tr>
-         <% } %>
-        <% if (profile.social) { %>
-        <tr>
-          <td>Social</td>
-          <td>
-            <ul class="social-list">
-            <% if (profile.social.twitter.handle) { %>
-              <li>
-                <a href="https://twitter.com/<%= profile.social.twitter.handle %>" target="_new"><i class="fa fa-twitter-square" aria-hidden="true"></i> Twitter</a>
-                <% if(profile.mostRecentPlatform === 'twitter') { %> <em><i class="fa fa-info-circle" aria-hidden="true"></i> Most recently used. <% } %>
+        <div class="col-md-8">
+          <h3><i class="fa fa-user" aria-hidden="true"></i> Profile</h3>
+          <table class="table table-hover table-user-information">
+            <tbody>
+              <% if (profile.name) { %>
+                <tr>
+                  <td>Name:</td>
+                  <td>
+                    <%= profile.name %>
+                  </td>
+                </tr>
+                <% } %>
+                  <% if (profile.triggeredOn) { %>
+                    <tr>
+                      <td>Date Triggered:</td>
+                      <td>
+                        <%= profile.triggeredOn.toLocaleString() %>
+                      </td>
+                    </tr>
+                    <% } %>
+                      <% if (profile.birthday) { %>
+                        <tr>
+                          <td>Date of Birth:</td>
+                          <td>
+                            <%= profile.birthday.toLocaleDateString() %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Age:</td>
+                          <td>
+                            <%= profile.age %>
+                          </td>
+                        </tr>
+                        <% } %>
+                          <% if (profile.gender) { %>
+                            <tr>
+                              <td>Gender:</td>
+                              <td>
+                                <%= profile.gender %>
+                              </td>
+                            </tr>
+                            <% } %>
+                              <% if (profile.email) { %>
+                                <tr>
+                                  <td>Email</td>
+                                  <td><a href="mailto:<%= profile.email %>"><i class="fa fa-envelope-o" aria-hidden="true"></i> <%= profile.email %></a></td>
+                                </tr>
+                                <% } %>
+                                  <% if (profile.phonenumber) { %>
+                                    <tr>
+                                      <td>Phone Number</td>
+                                      <td>
+                                        <%= profile.phonenumber %>
+                                      </td>
+                                    </tr>
+                                    <% } %>
+                                      <% if (profile.social) { %>
+                                        <tr>
+                                          <td>Social</td>
+                                          <td>
+                                            <ul class="social-list">
+                                              <% if (profile.social.twitter.handle) { %>
+                                                <li>
+                                                  <a href="https://twitter.com/<%= profile.social.twitter.handle %>" target="_new"><i class="fa fa-twitter-square" aria-hidden="true"></i> Twitter</a>
+                                                  <% if(profile.mostRecentPlatform === 'twitter') { %> <em><i class="fa fa-info-circle" aria-hidden="true"></i> Most recently used. <% } %>
               </li>
             <% } %>
             <% if (profile.social.instagram.handle) { %>
@@ -96,7 +93,31 @@
         </tr>
         <% } %>
       </tbody>
-    </table>
+    </table> 
+
+  </div>
+</div>
+      
+    </div>
+    <div>
+
+      <div class="container">
+        <form class="pull-right">
+          <input id="sendEmail" type="email" required="true">
+          <button id="sendBtn">Email Report</button>
+          <div id="email-sent-success" class="alert alert-success alert-dismissable" hidden="true">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Success! Profile
+            details sent to
+          </div>
+          <div id="email-sent-failed" class="alert alert-failure alert-dismissable" hidden="true">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Failure! Profile
+            details not sent to
+          </div>
+        </form>
+        <div id="response"></div>
+      </div>
+      <div>
+       
   </div>
     <!-- TWITTER -->
     <% if (profile.social.twitter.status) { %>
@@ -156,7 +177,7 @@
 
 </div>
 <script>
-  $("#sendBtn").click(function(){
+  $("#sendBtn").click(function () {
     var id = document.getElementById("profileId").value
     var sendEmail = document.getElementById("sendEmail").value
     /*
@@ -180,23 +201,21 @@
       })
       }
     }*/
-      var success = true;
-      if (success)
-      {
-        var div = document.getElementById('email-sent-success');
-        div.innerHTML = div.innerHTML + email;
-        $("#email-sent-success").show();
-      }
-      else 
-      {
-        var div = document.getElementById('email-sent-failed');
-        div.innerHTML = div.innerHTML + email;
-        $("#email-sent-failed").show();
-      }
-    });
+    var success = true;
+    if (success) {
+      var div = document.getElementById('email-sent-success');
+      div.innerHTML = div.innerHTML + email;
+      $("#email-sent-success").show();
+    }
+    else {
+      var div = document.getElementById('email-sent-failed');
+      div.innerHTML = div.innerHTML + email;
+      $("#email-sent-failed").show();
+    }
+  });
   $(document).ready(() => {
-    $('tr[data-href]').on("click", function() {
-        window.open($(this).data('href'), '_blank');
+    $('tr[data-href]').on("click", function () {
+      window.open($(this).data('href'), '_blank');
     });
   });
 </script>

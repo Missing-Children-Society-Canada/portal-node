@@ -4,54 +4,56 @@
     <% if (!user) { %>
       <div class="jumbotron">
         <img src="img/mcsc-logo.png">
-        <h2>Person Finder App</h2>
+        <h2>Person Finder</h2>
         <div class="login">
           <a class="btn btn-success btn-lg" href="/login" role="button">login</a>
         </div>
       </div>
       <% } %>
         <% if (user) { %>
-          <h3>Active Profiles</h3>
-          <table id="profile-list" class="table table-hover tr-link">
-            <thead>
-              <td><strong>Image</strong></td>
-              <td><strong>Name</strong></td>
-              <td><strong>Date of Birth</strong></td>
-              <td><strong>Trigger Time</strong></td>
-              <td><strong>Gender</strong></td>
-            </thead>
-            <tbody>
-              <% for(var i=0; i < profiles.length; i++) { %>
-                <tr data-id="<%= profiles[i].id %>">
-                  <td><img src="<%= profiles[i].photo %>"></td>
-                  <td>
-                    <%= profiles[i].name %>
-                  </td>
-                  <td>
-                    <%= profiles[i].birthday ? profiles[i].birthday.toLocaleDateString() : "unknown" %>
-                  </td>
-                  <td>
-                    <%= profiles[i].triggeredOn.toLocaleString() %>
-                  </td>
-                  <td>
-                    <%= profiles[i].gender %>
-                  </td>
-                </tr>
-                <% } %>
-            </tbody>
-          </table>
+          <div>
+            <h3>Missing Persons</h3>
+            <table id="profile-list" class="table table-hover tr-link">
+              <thead>
+                <td></td>
+                <td><strong>Name</strong></td>
+                <td><strong>Date of Birth</strong></td>
+                <td><strong>Triggered</strong></td>
+                <td><strong>Gender</strong></td>
+              </thead>
+              <tbody>
+                <% for(var i=0; i < profiles.length; i++) { %>
+                  <tr data-id="<%= profiles[i].id %>">
+                    <td>
+                      <img src="<%= profiles[i].photo %>" style="width:140px" class="img-circle" alt="<%= profiles[i].name %>">
+                    </td>
+                    <td>
+                      <%= profiles[i].name %>
+                    </td>
+                    <td>
+                      <%= profiles[i].birthday ? profiles[i].birthday.toLocaleDateString() : "unknown" %>
+                    </td>
+                    <td>
+                      <%= profiles[i].triggeredOn.toLocaleString() %>
+                    </td>
+                    <td>
+                      <%= profiles[i].gender %>
+                    </td>
+                  </tr>
+                  <% } %>
+              </tbody>
+            </table>
+          </div>
           <% } %>
   </div>
   <script>
     $(document).ready(() => {
       $("#profile-list >tbody >tr").each((index, element) => {
-        console.log(element);
         $(element).click((e, elem) => {
           window.location.href = "/profile/" + $(e.delegateTarget).data("id");
         })
       })
     });
-
   </script>
 
   <% include ../views/partials/footer %>
