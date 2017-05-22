@@ -17,7 +17,6 @@
             <% } %>
               <table class="table table-hover table-user-information">
                 <tbody>
-
                   <% if (profile.triggeredOn) { %>
                     <tr>
                       <td>Date Triggered:</td>
@@ -93,17 +92,21 @@
           <td></td>
           <td>
             <form class="pull-right form-inline">
-          <input id="sendEmail" type="email" placeholder="jane.doe@example.com" class="form-control" required="true">
-          <button id="sendBtn" class="btn btn-default">Send</button>
-          <div id="email-sent-success" class="alert alert-success alert-dismissable" hidden="true">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Success! Profile
-            details sent to
-          </div>
-          <div id="email-sent-failed" class="alert alert-failure alert-dismissable" hidden="true">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Failure! Profile
-            details not sent to
-          </div>
-        </form>
+              <div class="input-group">
+                <input id="sendEmail" type="email" placeholder="jane.doe@example.com" class="form-control" required="true">
+                <span class="input-group-btn">
+                  <button id="sendBtn" class="btn btn-default"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></button>
+                </span>
+              </div>
+              <div id="email-sent-success" class="alert alert-success alert-dismissable" hidden="true">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Success! Profile
+                details sent to
+              </div>
+              <div id="email-sent-failed" class="alert alert-failure alert-dismissable" hidden="true">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Failure! Profile
+                details not sent to
+              </div>
+            </form>
             </td>
           </tr>
       </tbody>
