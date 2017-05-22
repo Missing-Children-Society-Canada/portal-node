@@ -19,7 +19,7 @@
                 <tbody>
                   <% if (profile.triggeredOn) { %>
                     <tr>
-                      <td>Date Triggered:</td>
+                      <td>Requested:</td>
                       <td>
                         <%= profile.triggeredOn.toLocaleString() %>
                       </td>
@@ -50,7 +50,12 @@
                               <% if (profile.email) { %>
                                 <tr>
                                   <td>Email</td>
-                                  <td><a href="mailto:<%= profile.email %>"><i class="fa fa-envelope-o" aria-hidden="true"></i> <%= profile.email %></a></td>
+                                  <td>
+                                    <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                    <a href="mailto:<%= profile.email %>">
+                                      <%= profile.email %>
+                                    </a>
+                                  </td>
                                 </tr>
                                 <% } %>
                                   <% if (profile.phonenumber) { %>
@@ -68,7 +73,8 @@
                                             <ul class="social-list">
                                               <% if (profile.social.twitter.handle) { %>
                                                 <li>
-                                                  <i class="fa fa-twitter-square" aria-hidden="true"></i> <a href="https://twitter.com/<%= profile.social.twitter.handle %>" target="_new">Twitter</a>
+                                                  <i class="fa fa-twitter-square" aria-hidden="true"></i> <a href="https://twitter.com/<%= profile.social.twitter.handle %>"
+                                                    target="_new">Twitter</a>
                                                   <% if(profile.mostRecentPlatform === 'twitter') { %> <em><i class="fa fa-info-circle text-muted" aria-hidden="true"></i> Most recently used. <% } %>
               </li>
             <% } %>
@@ -122,8 +128,8 @@
       <table id="recent-tweets" class="table table-hover table-user-information">
         <thead>
           <tr>
+            <th><span class="glyphicon glyphicon-time"></span></th>
             <th>Tweet</th>
-            <th>Date/Time</th>
             <th>Source</th>
             <th>Geo</th>
             <th>Coordinates</th>
@@ -133,8 +139,8 @@
           <% for(var i=0; i < profile.social.twitter.status.length; i++) { %>
             <% let status = profile.social.twitter.status[i] %>
             <tr data-href="https://twitter.com/<%=profile.social.twitter.handle%>/status/<%=status.id_str%>" class="tr-link">
+              <td><h6><%= status.createdAd.toLocaleString() %></h6></td>
               <td><%= status.text %></td>
-              <td><%= status.createdAd.toLocaleString() %></td>
               <td><%= status.source %></td>
               <td><%= status.geo %></td>
               <td><%= status.coordinates %></td>
@@ -153,17 +159,17 @@
       <table id="recent-fb-posts" class="table table-hover table-user-information">
         <thead>
           <tr>
+            <th><span class="glyphicon glyphicon-time"></span></th>
             <th>Message</th>
             <th>Story</th>
-            <th>Date/Time</th>
         </thead>
         <tbody>
           <% for(var i=0; i < profile.social.facebook.posts.length; i++) { %>
             <% let post = profile.social.facebook.posts[i] %>
             <tr data-href="https://facebook.com/<%=profile.social.facebook.profile%>/posts/<%=post.id.split('_')[1]%>" class="tr-link">
+              <td><h6><%= post.created_time.toLocaleString() %></h6></td>
               <td><%= post.message %></td>
               <td><%= post.story %></td>
-              <td><%= post.created_time.toLocaleString() %></td>
             </tr>
           <% } %>
         </tbody>
