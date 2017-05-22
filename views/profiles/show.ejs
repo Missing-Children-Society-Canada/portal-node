@@ -152,7 +152,11 @@
               <td><h6><%= status.source %></h6></td>
               <td><%= status.geo %></td>
               <td><%= status.coordinates %></td>
-              <td><%= status.place.name ? status.place.name + " - " + status.place.country + "(" + status.place.type + ")" : "" %></td>
+              <td>
+                <% if (status.place.name) { %>
+                <a target="_blank" href="https://bing.com/maps?q=<%= status.place.name + " " + status.place.country + " " + status.place.type %>"><%= status.place.name + " - " + status.place.country + "(" + status.place.type + ")" %></a>
+                <% } %>
+              </td>
             </tr>
           <% } %>
         </tbody>
