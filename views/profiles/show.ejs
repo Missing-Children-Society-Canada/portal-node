@@ -81,6 +81,7 @@
             <tr>
               <td></td>
               <td>
+                <% if (user) { %>
                 <div class="pull-right form-inline">
                   <div class="input-group">
                     <input id="sendEmail" type="email" placeholder="jane.doe@example.com" class="form-control" required="true">
@@ -95,6 +96,7 @@
                     <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                   </div>
                 </div>
+                <% } %>
               </td>
             </tr>
           </tbody>

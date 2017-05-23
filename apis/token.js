@@ -48,11 +48,15 @@ Token.prototype.verify = function(id, token)
         },
         function (error, response, body) {
             if (!error && (response.statusCode == 200 || response.statusCode == 201) && response.body == "true") {
+                console.log("Token was verified")
+                console.log("Body "+response.body)
                 // Body should be "true" if token is valid
                 resolve(response.body);
             }
             else 
             {
+                console.log("Token didn't get verified")
+                console.log("Body "+response.body)
                 reject(response.body);
             }
         }
