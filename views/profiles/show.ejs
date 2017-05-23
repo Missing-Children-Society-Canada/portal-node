@@ -178,7 +178,26 @@
     <!-- INSTAGRAM -->
     <% if (profile.social.instagram.posts) { %>
       <div class="tab-pane fade in active" id="Instagram">
-        Instagram data coming soon.
+        <table id="recent-ig-posts" class="table table-hover table-user-information">
+          <thead>
+            <tr>
+              <th></th>
+              <th><span class="glyphicon glyphicon-time"></span></th>
+              <th>Message</th>
+              <th>Story</th>
+          </thead>
+          <tbody>
+            <% for(var i=0; i < profile.social.instagram.posts.length; i++) { %>
+              <% var post = profile.social.instagram.posts[i] %>
+              <tr>
+                <td><a href="" target="_blank"><span class="glyphicon glyphicon-link"></span></a></td>
+                <td><h6><%= post.created_time.toLocaleString() %></h6></td>
+                <td><%= post.message %></td>
+                <td><h6><%= post.story %></h6></td>
+              </tr>
+            <% } %>
+          </tbody>
+        </table>
       </div>
     <% } %>
   </div>
