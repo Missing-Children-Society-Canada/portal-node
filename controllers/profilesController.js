@@ -1,4 +1,5 @@
 'use strict';
+
 var config = require('../config');
 var ProfileApi = require('../apis/profiles');
 

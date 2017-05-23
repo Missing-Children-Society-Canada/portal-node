@@ -1,4 +1,5 @@
 'use strict';
+
 var DocumentDBClient = require('documentdb').DocumentClient;
 
 var Profile = function(config) {
@@ -238,7 +239,7 @@ Profile.prototype.get = function(id) {
         this.getList().then((profiles) => {
             profiles.forEach((profile) => {
                 if (profile.id === id) {
-                    console.log(JSON.stringify(profile, null, 4));
+                    //console.log(JSON.stringify(profile, null, 4));
                     resolve(profile);
                 }
             });
