@@ -4,9 +4,7 @@
     <div class="jumbotron">
       <div class="row">
         <div class="col-md-4">
-          <h2 id=profileId hidden="true">
-            <%= profile.id %>
-          </h2>
+          <input id="profileId" type="hidden" value="<%= profile.id %>"/>
           <img src="<%= profile.photo %>" class="img-responsive">
         </div>
         <div class="col-md-8" style="background-color: #fff">
@@ -97,7 +95,7 @@
         <tr>
           <td></td>
           <td>
-            <form class="pull-right form-inline">
+            <div class="pull-right form-inline">
               <div class="input-group">
                 <input id="sendEmail" type="email" placeholder="jane.doe@example.com" class="form-control" required="true">
                 <span class="input-group-btn">
@@ -105,14 +103,12 @@
                 </span>
               </div>
               <div id="email-sent-success" class="alert alert-success alert-dismissable" hidden="true">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Success! Profile
-                details sent to
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
               </div>
               <div id="email-sent-failed" class="alert alert-failure alert-dismissable" hidden="true">
-                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Failure! Profile
-                details not sent to
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
               </div>
-            </form>
+            </div>
             </td>
           </tr>
       </tbody>
@@ -200,43 +196,35 @@
     </div>
 </div>
 <script>
-  $("#sendBtn").click(function () {
-
-    var id = document.getElementById("profileId").value
-    var sendEmail = document.getElementById("sendEmail").value
-    /*
-    var d = 
-    {
-      email : sendEmail,
-      userid: id
-    };
-    if (sendEmail != null && sendEmail != "")
-    {
-      $.ajax({
-        type: "POST",
-        url: 'http://localhost:3000/api/notify',
-        data: d,
-        success: function(res) {
-            $(".result").html(res);    
-        },
-        error: function(err) {
-            $(".result").html(err); 
-        }
-      })
+    $("#sendBtn").bind('click', function () {
+      var id = document.getElementById("profileId").value
+      var sendEmail = document.getElementById("sendEmail").value
+      var d = 
+      {
+        email : sendEmail,
+        userid: id
+      };
+      if (sendEmail != null && sendEmail != "")
+      {
+        $.ajax({
+          type: "POST",
+          url: 'http://localhost:3000/api/notify',
+          data: d,
+          success: function(res) {
+            var div = document.getElementById('email-sent-success');
+            div.innerHTML = "Success! Profile details sent to " + sendEmail;
+            $("#email-sent-success").show();
+              $(".result").html(res);    
+          },
+          error: function(err) {
+            var div = document.getElementById('email-sent-failed');
+            div.innerHTML = "Failure! Profile details not sent to " + sendEmail;
+            $("#email-sent-failed").show();
+              $(".result").html(err); 
+          }
+        })
       }
-    }*/
-    var success = true;
-    if (success) {
-      var div = document.getElementById('email-sent-success');
-      div.innerHTML = div.innerHTML + email;
-      $("#email-sent-success").show();
-    }
-    else {
-      var div = document.getElementById('email-sent-failed');
-      div.innerHTML = div.innerHTML + email;
-      $("#email-sent-failed").show();
-    }
-  });
+    });
 </script>
 
 <% include ../../views/partials/footer %>

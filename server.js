@@ -11,9 +11,11 @@ var bunyan = require('bunyan');
 var mongoose = require('mongoose');
 var config = require('./config');
 var ProfileApi = require('./apis/profiles');
+var TokenApi = require('./apis/token');
 
 // Controllers
 var profiles = require('./controllers/profilesController');
+var token = require('./controllers/tokenController');
 
 var MongoStore = require('connect-mongo')(expressSession);
 
@@ -193,8 +195,7 @@ app.get('/profile/:id', ensureAuthenticated, profiles.show);
 
 // APIS
 app.get('/api/profiles', ensureAuthenticated, profiles.list);
-app.put('/api/notify', ensureAuthenticated, function (req, res) {
-  res.end(200);
-})
+app.put('/api/notify', ensureAuthenticated, token.send);
+app.post('/api/notify', ensureAuthenticated, token.send);
 
 app.listen(config.Port);
