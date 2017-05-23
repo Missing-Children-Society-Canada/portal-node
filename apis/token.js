@@ -2,6 +2,7 @@
 var DocumentDBClient = require('documentdb').DocumentClient;
 var http = require('http');
 var request = require('request');
+var config = require('../config');
 
 /*
 sendEmailInvite(email: string, personId: string) {
