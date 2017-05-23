@@ -1,231 +1,230 @@
 <% include ../../views/partials/header %>
-<div class="container profile">
-  <div class="jumbotron">
-    <div class="row">
-      <div class="col-md-4">
-        <h2 id=profileId hidden="true">
-          <%= profile.id %>
-        </h2>
-        <img src="<%= profile.photo %>" class="img-responsive">
-      </div>
-      <div class="col-md-8" style="background-color: #fff">
-        <% if (profile.name) { %>
-          <h3><i class="fa fa-user" aria-hidden="true"></i>
-            <%= profile.name %>
-          </h3>
+
+  <div class="container profile">
+    <div class="jumbotron">
+      <div class="row">
+        <div class="col-md-4">
+          <input id="profileId" type="hidden" value="<%= profile.id %>"/>
+          <img src="<%= profile.photo %>" class="img-responsive">
+        </div>
+        <div class="col-md-8" style="background-color: #fff">
+          <% if (profile.name) { %>
+            <h3><i class="fa fa-user" aria-hidden="true"></i>
+              <%= profile.name %>
+            </h3>
+            <% } %>
+              <table class="table table-hover table-user-information">
+                <tbody>
+                  <% if (profile.triggeredOn) { %>
+                    <tr>
+                      <td>Requested:</td>
+                      <td>
+                        <%= profile.triggeredOn.toLocaleString() %>
+                      </td>
+                    </tr>
+                    <% } %>
+                      <% if (profile.birthday) { %>
+                        <tr>
+                          <td>Date of Birth:</td>
+                          <td>
+                            <%= profile.birthday.toLocaleDateString() %>
+                          </td>
+                        </tr>
+                        <tr>
+                          <td>Age:</td>
+                          <td>
+                            <%= profile.age %>
+                          </td>
+                        </tr>
+                        <% } %>
+                          <% if (profile.gender) { %>
+                            <tr>
+                              <td>Gender:</td>
+                              <td>
+                                <%= profile.gender %>
+                              </td>
+                            </tr>
+                            <% } %>
+                              <% if (profile.email) { %>
+                                <tr>
+                                  <td>Email</td>
+                                  <td>
+                                    <i class="fa fa-envelope-o" aria-hidden="true"></i>
+                                    <a href="mailto:<%= profile.email %>">
+                                      <%= profile.email %>
+                                    </a>
+                                  </td>
+                                </tr>
+                                <% } %>
+                                  <% if (profile.phonenumber) { %>
+                                    <tr>
+                                      <td>Phone Number</td>
+                                      <td>
+                                        <%= profile.phonenumber %>
+                                      </td>
+                                    </tr>
+                                    <% } %>
+                                      <% if (profile.social) { %>
+                                        <tr>
+                                          <td>Social</td>
+                                          <td>
+                                            <ul class="social-list">
+                                              <% if (profile.social.twitter.handle) { %>
+                                                <li>
+                                                  <i class="fa fa-twitter-square" aria-hidden="true"></i> <a href="https://twitter.com/<%= profile.social.twitter.handle %>"
+                                                    target="_new">Twitter</a>
+                                                  <% if(profile.mostRecentPlatform === 'twitter') { %> <em><i class="fa fa-info-circle text-muted" aria-hidden="true"></i> Most recently used. <% } %>
+              </li>
+            <% } %>
+            <% if (profile.social.instagram.handle) { %>
+              <li>
+                <i class="fa fa-instagram" aria-hidden="true"></i> <a href="https://instagram.com/<%= profile.social.instagram.handle %>" target="_new">Instagram</a>
+                <% if(profile.mostRecentPlatform === 'instagram') { %> <em><i class="fa fa-info-circle text-muted" aria-hidden="true"></i> Most recently used. <% } %>
+              </li>
+            <% } %>
+            <% if (profile.social.facebook.profile) { %>
+              <li>
+                <i class="fa fa-facebook-square" aria-hidden="true"></i> <a href="https://facebook.com/<%= profile.social.facebook.profile %>" target="_new">Facebook</a>
+                <% if(profile.mostRecentPlatform === 'facebook') { %> <em><i class="fa fa-info-circle text-muted" aria-hidden="true"></i> Most recently used. <% } %>
+              </li>
+            <% } %>
+            <ul>
+          </td>
+        </tr>
         <% } %>
-        <table class="table table-hover table-user-information">
-          <tbody>
-            <% if (profile.triggeredOn) { %>
-              <tr>
-                <td>Requested:</td>
-                <td><%= profile.triggeredOn.toLocaleString() %></td>
-              </tr>
-            <% } %>
-            <% if (profile.birthday) { %>
-              <tr>
-                <td>Date of Birth:</td>
-                <td><%= profile.birthday.toLocaleDateString() %></td>
-              </tr>
-              <tr>
-                <td>Age:</td>
-                <td><%= profile.age %></td>
-              </tr>
-            <% } %>
-            <% if (profile.gender) { %>
-              <tr>
-                <td>Gender:</td>
-                <td><%= profile.gender %></td>
-              </tr>
-            <% } %>
-            <% if (profile.email) { %>
-              <tr>
-                <td>Email</td>
-                <td>
-                  <i class="fa fa-envelope-o" aria-hidden="true"></i>
-                  <a href="mailto:<%= profile.email %>"><%= profile.email %></a>
-                </td>
-              </tr>
-            <% } %>
-            <% if (profile.phonenumber) { %>
-              <tr>
-                <td>Phone Number</td>
-                <td><%= profile.phonenumber %></td>
-              </tr>
-            <% } %>
-            <% if (profile.social) { %>
-              <tr>
-                <td>Social</td>
-                <td>
-                    <ul class="social-list">
-                      <% if (profile.social.twitter.handle) { %>
-                        <li>
-                          <i class="fa fa-twitter-square" aria-hidden="true"></i> <a href="https://twitter.com/<%= profile.social.twitter.handle %>" target="_new">Twitter</a>
-                          <% if(profile.mostRecentPlatform === 'twitter') { %> <em><i class="fa fa-info-circle text-muted" aria-hidden="true"></i> Most recently used.</em><% } %>
-                        </li>
-                      <% } %>
-                      <% if (profile.social.instagram.handle) { %>
-                        <li>
-                          <i class="fa fa-instagram" aria-hidden="true"></i> <a href="https://instagram.com/<%= profile.social.instagram.handle %>" target="_new">Instagram</a>
-                          <% if(profile.mostRecentPlatform === 'instagram') { %> <em><i class="fa fa-info-circle text-muted" aria-hidden="true"></i> Most recently used.</em><% } %>
-                        </li>
-                      <% } %>
-                      <% if (profile.social.facebook.profile) { %>
-                        <li>
-                          <i class="fa fa-facebook-square" aria-hidden="true"></i> <a href="https://facebook.com/<%= profile.social.facebook.profile %>" target="_new">Facebook</a>
-                          <% if(profile.mostRecentPlatform === 'facebook') { %> <em><i class="fa fa-info-circle text-muted" aria-hidden="true"></i> Most recently used.</em><% } %>
-                        </li>
-                      <% } %>
-                    <ul>
-                  </td>
-                </tr>
-              <% } %>
-            <tr>
-              <td></td>
-              <td>
-                <form class="pull-right form-inline">
-                  <div class="input-group">
-                    <input id="sendEmail" type="email" placeholder="jane.doe@example.com" class="form-control" required="true">
-                    <span class="input-group-btn">
-                      <button id="sendBtn" class="btn btn-default"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></button>
-                    </span>
-                  </div>
-                  <div id="email-sent-success" class="alert alert-success alert-dismissable" hidden="true">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Success! Profile
-                    details sent to
-                  </div>
-                  <div id="email-sent-failed" class="alert alert-failure alert-dismissable" hidden="true">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button> Failure! Profile
-                    details not sent to
-                  </div>
-                </form>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-  <div class="tab-content">
-    <ul class="nav nav-tabs">
-      <% if (profile.social.twitter.status) { %>
-      <li class="nav active"><a href="#Twitter" data-toggle="tab"><h3><i class="fa fa-twitter-square" aria-hidden="true"></i> Tweets</h3></a></li>
-      <% } if (profile.social.facebook.posts) { %>
-      <li class="nav"><a href="#Facebook" data-toggle="tab"><h3><i class="fa fa-facebook-square" aria-hidden="true"></i> Posts</h3></a></li>
-      <% } if (profile.social.instagram.status) { %>
-      <li class="nav"><a href="#Instagram" data-toggle="tab"><h3><i class="fa fa-instagram" aria-hidden="true"></i> Posts</h3></a></li>
-      <% } %>
-    </ul>
-
-    <!-- TWITTER -->
-    <% if (profile.social.twitter.status) { %>
-      <div class="tab-pane fade in active" id="Twitter">
-        <table id="recent-tweets" class="table table-hover table-user-information">
-          <thead>
-            <tr>
-              <th><span class="glyphicon glyphicon-link"></span></th>
-              <th><span class="glyphicon glyphicon-time"></span></th>
-              <th>Tweet</th>
-              <th>Source</th>
-              <th><span class="glyphicon glyphicon-globe"></span></th>
-              <th></th>
-              <th></th>
-          </thead>
-          <tbody>
-            <% for(var i=0; i < profile.social.twitter.status.length; i++) { %>
-              <% var status = profile.social.twitter.status[i] %>
-              <tr>
-                <td><a href="https://twitter.com/<%=profile.social.twitter.handle%>/status/<%=status.id_str%>" target="_blank"><span class="glyphicon glyphicon-link"></span></a></td>
-                <td><h6><%= status.createdAd.toLocaleString() %></h6></td>
-                <td><%= status.text %></td>
-                <td><h6><%= status.source %></h6></td>
-                <td><%= status.geo %></td>
-                <td><%= status.coordinates %></td>
-                <td>
-                  <% if (status.place.name) { %>
-                  <h6><a target="_blank" href="https://bing.com/maps?q=<%= status.place.name + " " + status.place.country + " " + status.place.type %>"><%= status.place.name + " - " + status.place.country %></a></h6>
-                  <% } %>
-                </td>
-              </tr>
-            <% } %>
-          </tbody>
-        </table>
-      </div>
-    <% } %>
-
-    <!-- FACEBOOK -->
-    <% if (profile.social.facebook.posts) { %>
-      <div class="tab-pane fade" id="Facebook">
-        <table id="recent-fb-posts" class="table table-hover table-user-information">
-          <thead>
-            <tr>
-              <th><span class="glyphicon glyphicon-link"></span></th>
-              <th><span class="glyphicon glyphicon-time"></span></th>
-              <th>Message</th>
-              <th>Story</th>
-          </thead>
-          <tbody>
-            <% for(var i=0; i < profile.social.facebook.posts.length; i++) { %>
-              <% var post = profile.social.facebook.posts[i] %>
-              <tr>
-                <td><a href="https://facebook.com/<%=profile.social.facebook.profile%>/posts/<%=post.id.split('_')[1]%>" target="_blank"><span class="glyphicon glyphicon-link"></span></a></td>
-                <td><h6><%= post.created_time.toLocaleString() %></h6></td>
-                <td><%= post.message %></td>
-                <td><h6><%= post.story %></h6></td>
-              </tr>
-            <% } %>
-          </tbody>
-        </table>
-      </div>
-    <% } %>
-
-    <!-- INSTAGRAM -->
-    <% if (profile.social.instagram.posts) { %>
-      <div class="tab-pane fade in active" id="Instagram">
-        Instagram data coming soon.
-      </div>
-    <% } %>
+        <tr>
+          <td></td>
+          <td>
+            <div class="pull-right form-inline">
+              <div class="input-group">
+                <input id="sendEmail" type="email" placeholder="jane.doe@example.com" class="form-control" required="true">
+                <span class="input-group-btn">
+                  <button id="sendBtn" class="btn btn-default"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span></button>
+                </span>
+              </div>
+              <div id="email-sent-success" class="alert alert-success alert-dismissable" hidden="true">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              </div>
+              <div id="email-sent-failed" class="alert alert-failure alert-dismissable" hidden="true">
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+              </div>
+            </div>
+            </td>
+          </tr>
+      </tbody>
+    </table>
   </div>
 </div>
-
+</div>
+    <div class="tab-content"> <ul class="nav nav-tabs">
+        <% if (profile.social.twitter.status) { %>
+        <li class="nav active"><a href="#Twitter" data-toggle="tab"><h3><i class="fa fa-twitter-square" aria-hidden="true"></i> Tweets</h3></a></li>
+        <% } if (profile.social.facebook.posts) { %>
+        <li class="nav"><a href="#Facebook" data-toggle="tab"><h3><i class="fa fa-facebook-square" aria-hidden="true"></i> Posts</h3></a></li>
+        <% } if (profile.social.instagram.status) { %>
+        <li class="nav"><a href="#Instagram" data-toggle="tab"><h3><i class="fa fa-instagram" aria-hidden="true"></i> Posts</h3></a></li>
+        <% } %>
+    </ul>
+           <!-- TWITTER -->
+    <% if (profile.social.twitter.status) { %>
+        <div class="tab-pane fade in active" id="Twitter">
+      
+      <table id="recent-tweets" class="table table-hover table-user-information">
+        <thead>
+          <tr>
+            <th><span class="glyphicon glyphicon-link"></span></th>
+            <th><span class="glyphicon glyphicon-time"></span></th>
+            <th>Tweet</th>
+            <th>Source</th>
+            <th><span class="glyphicon glyphicon-globe"></span></th>
+            <th></th>
+            <th></th>
+        </thead>
+        <tbody>
+          <% for(var i=0; i < profile.social.twitter.status.length; i++) { %>
+            <% var status = profile.social.twitter.status[i] %>
+            <tr>
+              <td><a href="https://twitter.com/<%=profile.social.twitter.handle%>/status/<%=status.id_str%>" target="_blank"><span class="glyphicon glyphicon-link"></span></a></td>
+              <td><h6><%= status.createdAd.toLocaleString() %></h6></td>
+              <td><%= status.text %></td>
+              <td><h6><%= status.source %></h6></td>
+              <td><%= status.geo %></td>
+              <td><%= status.coordinates %></td>
+              <td>
+                <% if (status.place.name) { %>
+                <h6><a target="_blank" href="https://bing.com/maps?q=<%= status.place.name + " " + status.place.country + " " + status.place.type %>"><%= status.place.name + " - " + status.place.country %></a></h6>
+                <% } %>
+              </td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+           <!-- FACEBOOK -->
+    <% if (profile.social.facebook.posts) { %>
+        <div class="tab-pane fade" id="Facebook">
+   
+      <table id="recent-fb-posts" class="table table-hover table-user-information">
+        <thead>
+          <tr>
+            <th><span class="glyphicon glyphicon-link"></span></th>
+            <th><span class="glyphicon glyphicon-time"></span></th>
+            <th>Message</th>
+            <th>Story</th>
+        </thead>
+        <tbody>
+          <% for(var i=0; i < profile.social.facebook.posts.length; i++) { %>
+            <% var post = profile.social.facebook.posts[i] %>
+            <tr>
+              <td><a href="https://facebook.com/<%=profile.social.facebook.profile%>/posts/<%=post.id.split('_')[1]%>" target="_blank"><span class="glyphicon glyphicon-link"></span></a></td>
+              <td><h6><%= post.created_time.toLocaleString() %></h6></td>
+              <td><%= post.message %></td>
+              <td><h6><%= post.story %></h6></td>
+            </tr>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+  <% } %>
+           <!-- INSTAGRAM -->
+    <% if (profile.social.instagram.posts) { %>
+        <div class="tab-pane fade in active" id="Instagram">
+          Instagram data coming soon.
+      </div>
+  <% } %>
+    </div>
+</div>
 <script>
-  $("#sendBtn").click(function () {
-
-    var id = document.getElementById("profileId").value
-    var sendEmail = document.getElementById("sendEmail").value
-    /*
-    var d = 
-    {
-      email : sendEmail,
-      userid: id
-    };
-    if (sendEmail != null && sendEmail != "")
-    {
-      $.ajax({
-        type: "POST",
-        url: 'http://localhost:3000/api/notify',
-        data: d,
-        success: function(res) {
-            $(".result").html(res);    
-        },
-        error: function(err) {
-            $(".result").html(err); 
-        }
-      })
+    $("#sendBtn").bind('click', function () {
+      var id = document.getElementById("profileId").value
+      var sendEmail = document.getElementById("sendEmail").value
+      var d = 
+      {
+        email : sendEmail,
+        userid: id
+      };
+      if (sendEmail != null && sendEmail != "")
+      {
+        $.ajax({
+          type: "POST",
+          url: 'http://localhost:3000/api/notify',
+          data: d,
+          success: function(res) {
+            var div = document.getElementById('email-sent-success');
+            div.innerHTML = "Success! Profile details sent to " + sendEmail;
+            $("#email-sent-success").show();
+              $(".result").html(res);    
+          },
+          error: function(err) {
+            var div = document.getElementById('email-sent-failed');
+            div.innerHTML = "Failure! Profile details not sent to " + sendEmail;
+            $("#email-sent-failed").show();
+              $(".result").html(err); 
+          }
+        })
       }
-    }*/
-    var success = true;
-    if (success) {
-      var div = document.getElementById('email-sent-success');
-      div.innerHTML = div.innerHTML + email;
-      $("#email-sent-success").show();
-    }
-    else {
-      var div = document.getElementById('email-sent-failed');
-      div.innerHTML = div.innerHTML + email;
-      $("#email-sent-failed").show();
-    }
-  });
+    });
 </script>
 
 <% include ../../views/partials/footer %>
