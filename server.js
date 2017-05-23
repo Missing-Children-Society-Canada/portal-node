@@ -121,9 +121,6 @@ function ensureAuthenticated(req, res, next) {
 };
 
 function ensureAuthenticatedOrToken(req, res, next) {
-  console.log("Ensure authenticated or token");
-
-  // Check if there is a token
   if (req.query.access_token != null) {
     var token = req.query.access_token;
     var id = req.params.id;
@@ -133,11 +130,9 @@ function ensureAuthenticatedOrToken(req, res, next) {
         return next();
       },
       function () {
-        console.log("failed in ensure token");
-        return next();
+        console.log("Failed in ensure token!");
       });
   }
-
   return ensureAuthenticated(req, res, next);
 };
 

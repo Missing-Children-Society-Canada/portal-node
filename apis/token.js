@@ -42,19 +42,28 @@ Token.prototype.verify = function(id, token)
         config.validateTokenUrl,
         { 
             json:{
-                'id': id,
+                'userid': id,
                 'token': token
             }
         },
         function (error, response, body) {
-            if (!error && (response.statusCode == 200 || response.statusCode == 201) && response.body == "true") {
+            if (!error && (response.statusCode == 200 || response.statusCode == 201)) {
                 // Body should be "true" if token is valid
-                resolve(response.body);
+                var body = JSON.parse(response.body);
+                if (body ===  true)
+                {
+                    resolve(response.body);
+                }
+                else
+                {
+                    reject(response.body);
+                }
             }
-            else 
+            else
             {
                 reject(response.body);
             }
+            
         }
     );
 });
