@@ -38,7 +38,7 @@ Token.prototype.send = function(id, email)
     return new Promise((resolve, reject) => {
         var r;
         request.post(
-        'https://mscs-cf-functions.azurewebsites.net/api/notify_police?code=9hDa/Q8w5UX69H3WaxQPR5jdGOEok6Vub2PIbKpEHawJda19TfqIeg==',
+        config.notifyPoliceUrl,
         { 
             json:{
                 'email': email,
