@@ -11,6 +11,15 @@ body {
     margin-bottom: 60px;
 }
 
+.page-wrapper {
+  margin: 80px 0 30px 0;
+}
+
+footer > .container {
+  width: 100%;
+  margin: 20px 0 0 0;
+}
+
 .home > .jumbotron, .profile > .jumbotron {
   background: lightgrey;
   background-repeat:no-repeat;
