@@ -2,15 +2,15 @@
 
 var DocumentDBClient = require('documentdb').DocumentClient;
 
-var Profile = function(config) {
-  this.config = Object.assign({}, {
-    CollLink: 'dbs/reporting/colls/events',
+var Profile = function (config) {
+    this.config = Object.assign({}, {
+        CollLink: 'dbs/reporting/colls/events',
     }, config);
 }
 
 // Gets the full name from the event
-Profile.prototype.getNameFromEvent = function(event) {
-    switch(event.response.platform.toLowerCase()) {
+Profile.prototype.getNameFromEvent = function (event) {
+    switch (event.response.platform.toLowerCase()) {
         case 'instagram':
             return event.response.data.full_name;
         case 'facebook':
@@ -23,8 +23,8 @@ Profile.prototype.getNameFromEvent = function(event) {
 }
 
 // Gets the users profile photo from the event
-Profile.prototype.getUserPhotoFromEvent = function(event) {
-    switch(event.response.platform.toLowerCase()) {
+Profile.prototype.getUserPhotoFromEvent = function (event) {
+    switch (event.response.platform.toLowerCase()) {
         case 'instagram':
             return event.response.data.profile_picture;
         case 'facebook':
@@ -38,7 +38,7 @@ Profile.prototype.getUserPhotoFromEvent = function(event) {
 }
 
 // Gets the users birthday from the event
-Profile.prototype.getUserBirthdayFromEvent = function(event) {
+Profile.prototype.getUserBirthdayFromEvent = function (event) {
     if (event.response.platform.toLowerCase() === 'facebook') {
         return new Date(event.response.data.birthday);
     }
@@ -51,7 +51,7 @@ Profile.prototype.getUserBirthdayFromEvent = function(event) {
 }
 
 // Gets the users gender from the event
-Profile.prototype.getUserGenderFromEvent = function(event) {
+Profile.prototype.getUserGenderFromEvent = function (event) {
     if (event.user && event.user.facebook && event.user.facebook.gender) {
         return event.user.facebook.gender;
     }
@@ -60,7 +60,7 @@ Profile.prototype.getUserGenderFromEvent = function(event) {
 }
 
 // Gets the users gender from the event
-Profile.prototype.getEmailFromEvent = function(event) {
+Profile.prototype.getEmailFromEvent = function (event) {
     if (event.user && event.user.facebook && event.user.facebook.email) {
         return event.user.facebook.email;
     }
@@ -69,7 +69,7 @@ Profile.prototype.getEmailFromEvent = function(event) {
 }
 
 // Gets the users twitter hande from the event
-Profile.prototype.getTwitterHandleFromEvent = function(event) {
+Profile.prototype.getTwitterHandleFromEvent = function (event) {
     if (event.user && event.user.twitter && event.user.twitter.username) {
         return event.user.twitter.username;
     }
@@ -79,7 +79,7 @@ Profile.prototype.getTwitterHandleFromEvent = function(event) {
 
 
 // Gets the users instagram hande from the event
-Profile.prototype.getInstagramHandleFromEvent = function(event) {
+Profile.prototype.getInstagramHandleFromEvent = function (event) {
     if (event.user && event.user.instagram && event.user.instagram.username) {
         return event.user.instagram.username;
     }
@@ -88,7 +88,7 @@ Profile.prototype.getInstagramHandleFromEvent = function(event) {
 }
 
 // Gets the users instagram hande from the event
-Profile.prototype.getFacebookHandleFromEvent = function(event) {
+Profile.prototype.getFacebookHandleFromEvent = function (event) {
     if (event.user && event.user.facebook && event.user.facebook.$id) {
         return event.user.facebook.$id;
     }
@@ -96,13 +96,13 @@ Profile.prototype.getFacebookHandleFromEvent = function(event) {
     return null;
 }
 
-Profile.prototype.assignIfNotNull = function(object, parameter, value) {
-     if (value != null && value !== "") {
-         object[parameter] = value;
-     }
- }
+Profile.prototype.assignIfNotNull = function (object, parameter, value) {
+    if (value != null && value !== "") {
+        object[parameter] = value;
+    }
+}
 
-Profile.prototype.extractTwitterSocialInformation = function(profile, event) {
+Profile.prototype.extractTwitterSocialInformation = function (profile, event) {
     if (event.response.platform !== "twitter") {
         return;
     }
@@ -138,7 +138,7 @@ Profile.prototype.extractTwitterSocialInformation = function(profile, event) {
     }
 }
 
-Profile.prototype.extractFacebookSocialInformation = function(profile, event) {
+Profile.prototype.extractFacebookSocialInformation = function (profile, event) {
     if (event.response.platform !== "facebook") {
         return;
     }
@@ -167,73 +167,106 @@ Profile.prototype.extractFacebookSocialInformation = function(profile, event) {
     });
 }
 
-Profile.prototype.getList = function() {
+Profile.prototype.extractInstagramSocialInformation = function (profile, event) {
+    if (event.response.platform !== "instagram") {
+        return;
+    }
+
+    let data = event.response.data;
+    if (!profile.social.instagram.status) {
+        profile.social.instagram.posts = [];
+    }
+
+    // Do we already have this post?
+    let postLookup = {};
+    profile.social.instagram.posts.forEach((post) => {
+        postLookup[post.id] = true;
+    });
+
+    //data.posts.data.forEach((post) => {
+        //if (!postLookup[post.id]) {
+            //profile.social.instagram.posts.push({
+                // id: post.id,
+                // created_time: new Date(post.created_time),
+                // message: post.message,
+                // story: post.story
+            //});
+
+          //  postLookup[post.id] = true;
+     //   }
+    //});
+}
+
+Profile.prototype.getList = function () {
     return new Promise((resolve, reject) => {
-      let data = [];
-      const docDbClient = new DocumentDBClient(this.config.Host, { masterKey: this.config.AuthKey });
-      const query = 'SELECT * FROM c WHERE c.response.type =\'profile\' ORDER BY c.triggeredOn DESC';
-      const options = {
-          enableCrossPartitionQuery: true
-      }
-      docDbClient.queryDocuments(this.config.CollLink, query, options).toArray((err, results) => {
-          let profiles = {};
-          results.forEach((event) => {
-              let userid = event.user.id;
+        let data = [];
+        const docDbClient = new DocumentDBClient(this.config.Host, { masterKey: this.config.AuthKey });
+        const query = 'SELECT * FROM c WHERE c.response.type =\'profile\' ORDER BY c.triggeredOn DESC';
+        const options = {
+            enableCrossPartitionQuery: true
+        }
+        docDbClient.queryDocuments(this.config.CollLink, query, options).toArray((err, results) => {
+            let profiles = {};
+            results.forEach((event) => {
+                let userid = event.user.id;
 
-              let profile = profiles[userid] || {
-                  id: userid,
-                  eventCount: 0,
+                let profile = profiles[userid] || {
+                    id: userid,
+                    eventCount: 0,
 
-                  mostRecentPlatform: event.response.platform,
-                  triggeredOn: new Date(event.triggeredOn),
-                  name: this.getNameFromEvent(event),
-                  photo: this.getUserPhotoFromEvent(event),
-                  birthday: null,
-                  social: {
-                      twitter: {},
-                      facebook: {},
-                      instagram: {}
-                  }
-              };
+                    mostRecentPlatform: event.response.platform,
+                    triggeredOn: new Date(event.triggeredOn),
+                    name: this.getNameFromEvent(event),
+                    photo: this.getUserPhotoFromEvent(event),
+                    birthday: null,
+                    social: {
+                        twitter: {},
+                        facebook: {},
+                        instagram: {}
+                    }
+                };
 
-              profile.eventCount++;
+                profile.eventCount++;
 
-              this.assignIfNotNull(profile, 'email', this.getEmailFromEvent(event));
-              this.assignIfNotNull(profile, 'gender', this.getUserGenderFromEvent(event));
-              this.assignIfNotNull(profile, 'birthday', this.getUserBirthdayFromEvent(event));
-              this.assignIfNotNull(profile.social.twitter, 'handle', this.getTwitterHandleFromEvent(event));
-              this.assignIfNotNull(profile.social.instagram, 'handle', this.getInstagramHandleFromEvent(event));
-              this.assignIfNotNull(profile.social.facebook, 'profile', this.getFacebookHandleFromEvent(event));
+                this.assignIfNotNull(profile, 'email', this.getEmailFromEvent(event));
+                this.assignIfNotNull(profile, 'gender', this.getUserGenderFromEvent(event));
+                this.assignIfNotNull(profile, 'birthday', this.getUserBirthdayFromEvent(event));
+                this.assignIfNotNull(profile.social.twitter, 'handle', this.getTwitterHandleFromEvent(event));
+                this.assignIfNotNull(profile.social.instagram, 'handle', this.getInstagramHandleFromEvent(event));
+                this.assignIfNotNull(profile.social.facebook, 'profile', this.getFacebookHandleFromEvent(event));
 
-              if (event.response.platform === "twitter") {
-                this.extractTwitterSocialInformation(profile, event);
-              }
-              else if (event.response.platform === "facebook") {
-                this.extractFacebookSocialInformation(profile, event);
-              }
+                if (event.response.platform === "twitter") {
+                    this.extractTwitterSocialInformation(profile, event);
+                }
+                else if (event.response.platform === "facebook") {
+                    this.extractFacebookSocialInformation(profile, event);
+                }
+                else if (event.response.platform === "instagram") {
+                    this.extractInstagramSocialInformation(profile, event);
+                }
 
-              // calculate age (source: http://stackoverflow.com/questions/4060004/calculate-age-in-javascript)
-              if (profile.birthday) {
-                var ageDifMs = Date.now() - profile.birthday.getTime();
-                var ageDate = new Date(ageDifMs); // miliseconds from epoch
-                profile.age = Math.abs(ageDate.getUTCFullYear() - 1970);
-              }
+                // calculate age (source: http://stackoverflow.com/questions/4060004/calculate-age-in-javascript)
+                if (profile.birthday) {
+                    var ageDifMs = Date.now() - profile.birthday.getTime();
+                    var ageDate = new Date(ageDifMs); // miliseconds from epoch
+                    profile.age = Math.abs(ageDate.getUTCFullYear() - 1970);
+                }
 
-              profiles[userid] = profile;
-          });
+                profiles[userid] = profile;
+            });
 
-          // convert to array
-          let profileArray = [];
-          for (var key in profiles) {
-              profileArray.push(profiles[key]);
-          }
+            // convert to array
+            let profileArray = [];
+            for (var key in profiles) {
+                profileArray.push(profiles[key]);
+            }
 
-          resolve(profileArray);
-      });
+            resolve(profileArray);
+        });
     });
 }
 
-Profile.prototype.get = function(id) {
+Profile.prototype.get = function (id) {
     // TODO: refactor GetList to seperate profile creation, then direct query for a given profile
     return new Promise((resolve, reject) => {
         this.getList().then((profiles) => {
