@@ -9,19 +9,12 @@
  <div>
   <% if (user) { %>
  <div class="container">
-   <form class="pull-right">
-     <input id="sendEmail" type="email" required="true">
-     <button id="sendBtn">Email Report</button>
-        <div id="email-sent-success" class="alert alert-success alert-dismissable" hidden="true">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            Success! Profile details sent to
-        </div>
-        <div id="email-sent-failed" class="alert alert-failure alert-dismissable" hidden="true">
-            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-            Failure! Profile details not sent to
-        </div>
+    <form class="pull-right form-inline">
+      <div class="form-group">
+        <input type="email" class="form-control" id="exampleInputEmail2" placeholder="jane.doe@example.com">
+      </div>
+       <button id="sendBtn" class="btn btn-info"><i class="fa fa-envelope-o" aria-hidden="true"></i> Email Report</button>
     </form>
-    <div id="response"></div>
  </div>
   <% } %>
   <div>
@@ -156,47 +149,14 @@
 
 </div>
 <script>
-  $("#sendBtn").click(function(){
-    var id = document.getElementById("profileId").value
-    var sendEmail = document.getElementById("sendEmail").value
-    /*
-    var d = 
-    {
-      email : sendEmail,
-      userid: id
-    };
-    if (sendEmail != null && sendEmail != "")
-    {
-      $.ajax({
-        type: "POST",
-        url: 'http://localhost:3000/api/notify',
-        data: d,
-        success: function(res) {
-            $(".result").html(res);    
-        },
-        error: function(err) {
-            $(".result").html(err); 
-        }
-      })
-      }
-    }*/
-      var success = true;
-      if (success)
-      {
-        var div = document.getElementById('email-sent-success');
-        div.innerHTML = div.innerHTML + email;
-        $("#email-sent-success").show();
-      }
-      else 
-      {
-        var div = document.getElementById('email-sent-failed');
-        div.innerHTML = div.innerHTML + email;
-        $("#email-sent-failed").show();
-      }
-    });
+
   $(document).ready(() => {
     $('tr[data-href]').on("click", function() {
         window.open($(this).data('href'), '_blank');
+    });
+
+    $("#sendBtn").click(function(){
+      $.post()
     });
   });
 </script>
