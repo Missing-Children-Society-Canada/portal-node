@@ -217,14 +217,14 @@
         $.ajax({
           type: "POST",
           url: '/api/notify',
-          dataType: "void",
+          dataType: "json",
           data: d,
-          success: function(res) {
+          success: function() {
             var div = document.getElementById('email-sent-success');
             div.innerHTML = "Success! Profile details sent to " + sendEmail;
             $("#email-sent-success").show();
           },
-          error: function(err) {
+          error: function() {
             var div = document.getElementById('email-sent-failed');
             div.innerHTML = "Failure! Profile details not sent to " + sendEmail;
             $("#email-sent-failed").show();
