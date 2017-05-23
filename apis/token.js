@@ -3,38 +3,10 @@ var DocumentDBClient = require('documentdb').DocumentClient;
 var http = require('http');
 var request = require('request');
 var config = require('../config');
-
-/*
-sendEmailInvite(email: string, personId: string) {
-        if (email != null) {
-            console.log("Make it to send shit");
-            console.log("Email: " + email);
-            console.log("Person Id: " + personId);
-            // What to do with the response
-            var response = this.http.post("https://mscs-cf-functions.azurewebsites.net/api/notify_police?code=9hDa/Q8w5UX69H3WaxQPR5jdGOEok6Vub2PIbKpEHawJda19TfqIeg==",
-                {
-                    'email': email,
-                    'userId': personId
-                })
-                .map(response => response.json())
-                .toPromise()
-                .then(res => {
-                    console.log(res);
-                    return res;
-                });
-        }
-        else {
-            console.log("Couldn't send anything. Email was null!")
-        }
-    }
-*/
-
-
-
 var Token = function() {
 }
 
-Token.prototype.send = function(id, email) 
+Token.prototype.send = function(userid, email) 
 {
     return new Promise((resolve, reject) => {
         var r;
@@ -43,73 +15,64 @@ Token.prototype.send = function(id, email)
         { 
             json:{
                 'email': email,
-                'userId': id
+                'userid': userid
             }
         },
         function (error, response, body) {
-            if (!error && response.statusCode == 200) {
-                console.log(body)
-                r = response.statusCode
+            if (!error && (response.statusCode == 200 || response.statusCode == 201)) {
+                console.log("Email sent successfullly!")
+                console.log("Response Status code "+response.statusCode);
+                console.log("Id "+userid)
                 resolve(response);
+            }
+            else if (error)
+            {
+                console.log("Error while sending email!")
+                console.log("Response Status code "+response.statusCode);
+                reject(response);
             }
             else 
             {
-                console.log("Error while calling!")
-                console.log("Response Body "+response.body)
-                r = response.statusCode
+                
+                console.log("Not sure if it worked!")
+                console.log("Response body "+response.body);
+                console.log("Response status code "+response.statusCode);
                 reject(response);
             }
         }
     );
     resolve(r);
-    reject("DUNNO!");
 });
+}
 
-    /*
-    return http.post("https://mscs-cf-functions.azurewebsites.net/api/notify_police?code=9hDa/Q8w5UX69H3WaxQPR5jdGOEok6Vub2PIbKpEHawJda19TfqIeg==",
-    {
-        'email': email,
-        'userId': id
-    })
-    .map(response => response.json())
-    .toPromise();
-    */
-        /*
-    var response = this.http.post("https://mscs-cf-functions.azurewebsites.net/api/notify_police?code=9hDa/Q8w5UX69H3WaxQPR5jdGOEok6Vub2PIbKpEHawJda19TfqIeg==",
-                {
-                    'email': email,
-                    'userId': id
-                })
-                .map(response => response.json())
-                .toPromise()
-                .then(res => {
-                    console.log(res);
-                    return res;
-                });*/
-    }
+Token.prototype.check = function(id, token) 
+{
+    return new Promise((resolve, reject) => {
+        var r;
+        request.post(
+        config.validateTokenUrl,
+        { 
+            json:{
+                'id': id,
+                'token': token
+            }
+        },
+        function (error, response, body) {
+            if (!error && (response.statusCode == 200 || response.statusCode == 201)) {
+                resolve(response);
+            }
+            else if (error)
+            {
+                reject(response);
+            }
+            else 
+            {
+                reject(response);
+            }
+        }
+    );
+    resolve(r);
+});
+}
 
-
-Token.prototype.check = function(id, token) {
-    return this.http.post("https://mscs-cf-functions.azurewebsites.net/api/notify_police?code=9hDa/Q8w5UX69H3WaxQPR5jdGOEok6Vub2PIbKpEHawJda19TfqIeg==",
-                {
-                    'token': token,
-                    'userId': id
-                })
-                .map(response => response.json())
-                .toPromise();
-        /*
-    var response = this.http.post("https://mscs-cf-functions.azurewebsites.net/api/notify_police?code=9hDa/Q8w5UX69H3WaxQPR5jdGOEok6Vub2PIbKpEHawJda19TfqIeg==",
-                {
-                    'email': email,
-                    'userId': id
-                })
-                .map(response => response.json())
-                .toPromise()
-                .then(res => {
-                    console.log(res);
-                    return res;
-                });*/
-    }
-
-// Gets the full name from the event
 module.exports = Token;

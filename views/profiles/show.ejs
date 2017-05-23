@@ -192,26 +192,25 @@
       var sendEmail = document.getElementById("sendEmail").value
       var d =
       {
-        email : sendEmail,
-        userid: id
+        userid: id,
+        email : sendEmail
       };
       if (sendEmail != null && sendEmail != "")
       {
         $.ajax({
           type: "POST",
           url: '/api/notify',
+          dataType: "void",
           data: d,
           success: function(res) {
             var div = document.getElementById('email-sent-success');
             div.innerHTML = "Success! Profile details sent to " + sendEmail;
             $("#email-sent-success").show();
-              $(".result").html(res);
           },
           error: function(err) {
             var div = document.getElementById('email-sent-failed');
             div.innerHTML = "Failure! Profile details not sent to " + sendEmail;
             $("#email-sent-failed").show();
-              $(".result").html(err);
           }
         })
       }

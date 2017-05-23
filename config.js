@@ -36,6 +36,7 @@ exports.docDB = {
 
 // Notification Function
 exports.notifyPoliceUrl = process.env.NotifyPoliceUrl; // Azure Function Url for emailing police & generating access tokens
+exports.validateTokenUrl= process.env.ValidateTokenUrl; 
 
 // Validate Config
 var validateConfig = function(config, envKey, messageIfNotFound) {
