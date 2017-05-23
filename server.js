@@ -122,6 +122,29 @@ function ensureAuthenticated(req, res, next) {
   res.redirect('/login');
 };
 
+function ensureAuthenticatedOrToken(req, res, next) {
+  console.log("Ensure authenticated or token");
+  
+  // Check if there is a token
+  if (req.query.access_token != null)
+  {
+    var token = req.query.access_token;
+    var id = req.params.id;
+    new TokenApi().verify(id, token).then(
+      function() 
+      {
+        console.log("Success in ensure token");
+        return next();
+      }, 
+      function() {
+        console.log("failed in ensure token");
+        return next();
+      });
+    }
+  
+  return ensureAuthenticated(req, res, next);
+};
+
 app.get('/login',
   function (req, res, next) {
     passport.authenticate('azuread-openidconnect',
@@ -190,8 +213,7 @@ app.get('/', function (req, res) {
   }
 });
 
-app.get('/profile/:id', ensureAuthenticated, profiles.show);
-
+app.get('/profile/:id', ensureAuthenticatedOrToken, profiles.show);
 
 // APIS
 app.get('/api/profiles', ensureAuthenticated, profiles.list);

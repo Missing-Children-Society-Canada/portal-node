@@ -19,36 +19,25 @@ Token.prototype.send = function(userid, email)
             }
         },
         function (error, response, body) {
-            if (!error && (response.statusCode == 200 || response.statusCode == 201)) {
-                console.log("Email sent successfullly!")
-                console.log("Response Status code "+response.statusCode);
-                console.log("Id "+userid)
-                resolve(response);
-            }
-            else if (error)
+            if (!error && (response.statusCode == 200 || response.statusCode == 201)) 
             {
-                console.log("Error while sending email!")
-                console.log("Response Status code "+response.statusCode);
-                reject(response);
+                // Does this send a success response back?
+                resolve(response);
             }
             else 
             {
-                
-                console.log("Not sure if it worked!")
-                console.log("Response body "+response.body);
-                console.log("Response status code "+response.statusCode);
+                // Does this send a failed response back?
                 reject(response);
             }
         }
     );
-    resolve(r);
+    resolve();
 });
 }
 
-Token.prototype.check = function(id, token) 
+Token.prototype.verify = function(id, token) 
 {
     return new Promise((resolve, reject) => {
-        var r;
         request.post(
         config.validateTokenUrl,
         { 
@@ -58,20 +47,16 @@ Token.prototype.check = function(id, token)
             }
         },
         function (error, response, body) {
-            if (!error && (response.statusCode == 200 || response.statusCode == 201)) {
-                resolve(response);
-            }
-            else if (error)
-            {
-                reject(response);
+            if (!error && (response.statusCode == 200 || response.statusCode == 201) && response.body == "true") {
+                // Body should be "true" if token is valid
+                resolve(response.body);
             }
             else 
             {
-                reject(response);
+                reject(response.body);
             }
         }
     );
-    resolve(r);
 });
 }
 
