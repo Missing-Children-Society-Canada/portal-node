@@ -34,9 +34,12 @@ exports.docDB = {
   AuthKey: process.env.DocDb_AuthKey
 };
 
+// Notification Function
+exports.notifyPoliceUrl = process.env.NotifyPoliceUrl; // Azure Function Url for emailing police & generating access tokens
+
 // Validate Config
 var validateConfig = function(config, envKey, messageIfNotFound) {
-  if (!config) {
+  if (!config || config === "") {
     console.log(messageIfNotFound ? messageIfNotFound : "Error: process.env." + envKey + " not set, please set or see config.js.");
     process.exit(-1);
   }
@@ -44,3 +47,4 @@ var validateConfig = function(config, envKey, messageIfNotFound) {
 
 validateConfig(exports.docDB.Host, "DocDb_Host");
 validateConfig(exports.docDB.AuthKey, "DocDb_AuthKey");
+validateConfig(exports.notifyPoliceUrl, "NotifyPoliceUrl");
