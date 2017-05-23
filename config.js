@@ -30,13 +30,13 @@ exports.Port = process.env.PORT || 3000;
 
 // Configuration required for DocumentDB
 exports.docDB = {
-  Host: process.env.DocDb_Host,
-  AuthKey: process.env.DocDb_AuthKey
+  Host: process.env.DocDb_Host || "https://missingchildrendata.documents.azure.com",
+  AuthKey: process.env.DocDb_AuthKey || "agHqTdTA7xaIlSEnaVU63O0sFCnrSZuZHYcBLLoUgeyPCYC5qYSSFca7eMGbqRFmPaAPeaakJmMxYSy0OvxHog=="
 };
 
 // Notification Function
-exports.notifyPoliceUrl = process.env.NotifyPoliceUrl; // Azure Function Url for emailing police & generating access tokens
-exports.validateTokenUrl= process.env.ValidateTokenUrl; 
+exports.notifyPoliceUrl = process.env.NotifyPoliceUrl || "adasd"; // Azure Function Url for emailing police & generating access tokens
+exports.validateTokenUrl= process.env.ValidateTokenUrl || "asdasd"; 
 
 // Validate Config
 var validateConfig = function(config, envKey, messageIfNotFound) {

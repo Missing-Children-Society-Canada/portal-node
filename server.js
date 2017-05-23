@@ -93,9 +93,7 @@ app.set('view engine', 'ejs');
 app.use(express.logger());
 app.use(methodOverride());
 app.use(cookieParser());
-app.use('/img', express.static(__dirname + '/img'));
-app.use('/css', express.static(__dirname + '/css'));
-app.use('/fonts', express.static(__dirname + '/fonts'));
+app.use(express.static('public'));
 
 // set up session middleware
 if (config.useMongoDBSessionStore) {
@@ -124,24 +122,22 @@ function ensureAuthenticated(req, res, next) {
 
 function ensureAuthenticatedOrToken(req, res, next) {
   console.log("Ensure authenticated or token");
-  
+
   // Check if there is a token
-  if (req.query.access_token != null)
-  {
+  if (req.query.access_token != null) {
     var token = req.query.access_token;
     var id = req.params.id;
     new TokenApi().verify(id, token).then(
-      function() 
-      {
+      function () {
         console.log("Success in ensure token");
         return next();
-      }, 
-      function() {
+      },
+      function () {
         console.log("failed in ensure token");
         return next();
       });
-    }
-  
+  }
+
   return ensureAuthenticated(req, res, next);
 };
 
