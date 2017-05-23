@@ -123,11 +123,6 @@ function ensureAuthenticated(req, res, next) {
 };
 
 function ensureAuthenticatedOrToken(req, res, next) {
-  console.log("Ensure authenticated or token");
-  // TODO: seems like maybe the verify_token function is broken!
-  // IT always fails to find the token even when it is in the DB!
-
-  // Check if there is a token
   if (req.query.access_token != null)
   {
     var token = req.query.access_token;
@@ -142,9 +137,7 @@ function ensureAuthenticatedOrToken(req, res, next) {
         console.log("Failed in ensure token!");
       });
     }
-    //
-    return next();// TODO: comment out after testing is done!
-    //return ensureAuthenticated(req, res, next); // TODO: Uncomment after testing
+    return ensureAuthenticated(req, res, next); 
 };
 
 app.get('/login',
