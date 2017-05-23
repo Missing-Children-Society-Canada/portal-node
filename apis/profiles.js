@@ -173,15 +173,15 @@ Profile.prototype.extractInstagramSocialInformation = function (profile, event) 
     }
 
     let data = event.response.data;
-    if (!profile.social.instagram.status) {
-        profile.social.instagram.posts = [];
-    }
+    // if (!profile.social.instagram.status) {
+    //     profile.social.instagram.posts = [];
+    // }
 
     // Do we already have this post?
-    let postLookup = {};
-    profile.social.instagram.posts.forEach((post) => {
-        postLookup[post.id] = true;
-    });
+    // let postLookup = {};
+    // profile.social.instagram.posts.forEach((post) => {
+    //     postLookup[post.id] = true;
+    // });
 
     //data.posts.data.forEach((post) => {
         //if (!postLookup[post.id]) {
