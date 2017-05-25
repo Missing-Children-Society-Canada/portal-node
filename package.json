@@ -1,6 +1,6 @@
 {
-  "name": "passport-azure-ad-login-oidc",
-  "version": "0.0.1",
+  "name": "portal",
+  "version": "0.0.2",
   "dependencies": {
     "assert-plus": "*",
     "body-parser": "^1.15.2",

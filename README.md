@@ -1,7 +1,7 @@
 # Missing Children Society of Canada
 
 ## Description
-Portal for visualization of data, for both individuals and macro views.
+Portal for visualization of data, for the overview and individual profiles.
 
 ## Quick start
 - Clone
