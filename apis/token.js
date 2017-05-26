@@ -45,18 +45,12 @@ Token.prototype.verify = function (id, token) {
             function (error, response, body) {
                 if (!error && (response.statusCode == 200 || response.statusCode == 201)) {
                     // Body should be "true" if token is valid
-                    var body = JSON.parse(response.body);
-                    if (body === true) {
-                        resolve(response.body);
-                    }
-                    else {
-                        reject(response.body);
+                    var r = JSON.parse(response.body);
+                    if (r === true) {
+                        resolve();
                     }
                 }
-                else {
-                    reject(response.body);
-                }
-
+                reject();
             }
         );
     });

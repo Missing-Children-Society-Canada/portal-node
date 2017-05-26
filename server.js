@@ -126,14 +126,21 @@ function ensureAuthenticatedOrToken(req, res, next) {
     var id = req.params.id;
     new TokenApi().verify(id, token).then(
       function () {
-        console.log("Success in ensure token");
         return next();
       },
       function () {
-        console.log("Failed in ensure token!");
+        console.error("Error verifying token");
+        return ensureAuthenticated(req, res, next)
+      })
+      .catch(function (err) {
+        console.error('There was an error!', err.statusText);
+        return ensureAuthenticated(req, res, next)
       });
   }
-  return ensureAuthenticated(req, res, next);
+  else
+  {
+    return ensureAuthenticated(req, res, next);
+  }
 };
 
 app.get('/login',
