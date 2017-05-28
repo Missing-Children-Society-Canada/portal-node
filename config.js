@@ -49,3 +49,4 @@ var validateConfig = function (config, envKey, messageIfNotFound) {
 validateConfig(exports.docDB.Host, "DocDb_Host");
 validateConfig(exports.docDB.AuthKey, "DocDb_AuthKey");
 validateConfig(exports.notifyPoliceUrl, "NotifyPoliceUrl");
+validateConfig(exports.validateTokenUrl, "validateTokenUrl");
