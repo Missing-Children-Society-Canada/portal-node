@@ -2,9 +2,7 @@
 
   <div class="container home">
     <% if (!user) { %>
-      <div class="jumbotron">
-        <img src="img/mcsc-logo.png">
-      </div>
+	      <% include ../views/partials/login %>
       <% } %>
         <% if (user) { %>
           <div>
