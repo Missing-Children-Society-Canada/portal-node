@@ -1,6 +1,6 @@
-<% include ../views/partials/header %>
+<%- include('../views/partials/header.ejs', {bodyCss: !user ? 'login' : ''}) %>
 
-  <div class="container home">
+  <div class="container page home">
     <% if (!user) { %>
 	      <% include ../views/partials/login %>
       <% } %>
