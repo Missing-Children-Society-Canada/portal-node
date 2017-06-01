@@ -19,12 +19,20 @@ Token.prototype.send = function (userid, email) {
             },
             function (error, response, body) {
                 if (!error && (response.statusCode == 200 || response.statusCode == 201)) {
-                    // Does this send a success response back?
+                    console.error("Success notifying police");
                     resolve(response);
                 }
                 else {
-                    // Does this send a failed response back?
-                    reject(response);
+                    if (error)
+                    {
+                        console.error("Error notifying police : "+error);
+                        reject(Error(error));
+                    }
+                    else
+                    {
+                        console.error("Issue notifying police : "+response.statusCode);
+                         reject(response);
+                    }
                 }
             }
         );
