@@ -54,4 +54,4 @@ src/app/**/*.js.map
 dist
 
 # Developer Config
-dev.config.js
+.env
