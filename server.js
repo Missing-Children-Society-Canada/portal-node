@@ -14,7 +14,7 @@ var ProfileApi = require('./apis/profiles');
 var TokenApi = require('./apis/token');
 const appInsights = require("applicationinsights");
 
-appInsights.setup("<instrumentation_key>");
+appInsights.setup(config.AppInsights);
 appInsights
     .setAutoDependencyCorrelation(true)
     .setAutoCollectRequests(true)

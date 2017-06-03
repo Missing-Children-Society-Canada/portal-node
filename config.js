@@ -27,6 +27,7 @@ exports.useMongoDBSessionStore = false;
 exports.databaseUri = process.env.DataStore;
 exports.mongoDBSessionMaxAge = 24 * 60 * 60;
 exports.Port = process.env.PORT || 3000;
+exports.AppInsights = process.env.APPINSIGHTS_INSTRUMENTATIONKEY;
 
 // Configuration required for DocumentDB
 exports.docDB = {
