@@ -12,6 +12,16 @@ var mongoose = require('mongoose');
 var config = require('./config');
 var ProfileApi = require('./apis/profiles');
 var TokenApi = require('./apis/token');
+const appInsights = require("applicationinsights");
+
+appInsights.setup("<instrumentation_key>");
+appInsights
+    .setAutoDependencyCorrelation(true)
+    .setAutoCollectRequests(true)
+    .setAutoCollectPerformance(true)
+    .setAutoCollectExceptions(true)
+    .setAutoCollectDependencies(true)
+    .start();
 
 // Controllers
 var profiles = require('./controllers/profilesController');
@@ -116,8 +126,8 @@ app.use(passport.session());
 app.use(app.router);
 
 function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
-  res.redirect('/login');
+    if (req.isAuthenticated()) { return next(); }
+    res.redirect('/login');
 };
 
 function ensureAuthenticatedOrToken(req, res, next) {
