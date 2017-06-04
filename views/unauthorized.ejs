@@ -1,0 +1,38 @@
+<%- include('../views/partials/header.ejs', {bodyCss: 'login'}) %>
+
+  <div class="container page">
+    <div class="row">
+      <div class="headline container">
+        <h2>Unauthorized</h2>
+      </div>
+    </div>
+
+    <div class="row" style="margin-bottom:100px">
+      <div class="col-sm-6 col-sm-offset-3 form-box">
+        <div class="form-top">
+          <div class="form-top-left">
+            <img src="img/mcsc-logo.png">
+          </div>
+          <div class="form-top-right">
+            <i class="fa fa-lock"></i>
+          </div>
+        </div>
+        <div class="form-bottom">
+          <div class="row">
+            <div class="col social-login" style="text-align:center">
+              <div class="alert alert-warning" role="alert">Your account is not authorized to access the MCSC Portal. Please contact your Administrator.</div>
+              <div class="social-login-buttons">
+                <a class="btn btn-link-2" href="/logout">
+                  <i class="fa fa-sign-in"></i> Logout
+                </a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+<% include ../views/partials/footer %>
+

@@ -1,12 +1,12 @@
 
 exports.creds = {
-  identityMetadata: process.env.AADTenant || 'https://login.microsoftonline.com/6044a321-e0b8-4797-8651-e2722761fad9/.well-known/openid-configuration',
-  clientID: process.env.AADClient_ID || '08db5440-cada-4a70-a224-a2b8024d2cab',
+  identityMetadata: process.env.IdentityMetadata, //v2 tenant-specific endpoint https://login.microsoftonline.com/your_tenant_name.onmicrosoft.com/v2.0/.well-known/openid-configuration
+  clientID: process.env.ClientID,
+  clientSecret: process.env.ClientSecret,
   responseType: 'code id_token',
   responseMode: 'form_post',
   redirectUrl: process.env.RedirectUrl || 'http://localhost:3000/auth/openid/return',
   allowHttpForRedirectUrl: true,
-  clientSecret: process.env.ClientSecret || 'o9hfEmFr5NzAeHvPWJNkR2q',
   validateIssuer: true,
   issuer: null,
   passReqToCallback: false,
@@ -14,24 +14,24 @@ exports.creds = {
   cookieEncryptionKeys: [
     { 'key': '12345678901234567890123456789012', 'iv': '123456789012' }
   ],
-  scope: null,
+  scope: ['profile', 'offline_access' ],
   loggingLevel: 'info',
   nonceLifetime: 3600,
   nonceMaxAmount: 5,
   clockSkew: null,
 };
 
-exports.resourceURL = 'https://graph.windows.net';
-exports.destroySessionUrl = process.env.DestroySessionUrl || 'https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri=http://localhost:3000';
-exports.useMongoDBSessionStore = false;
+// Object Id of the Azure AD Group the user must be a member of to to access the portal
+exports.requiredAADGroupId = process.env.RequiredAADGroupId;
+
+exports.destroySessionUrl = process.env.DestroySessionUrl || 'https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri=http://localhost:3000'
 exports.databaseUri = process.env.DataStore;
-exports.mongoDBSessionMaxAge = 24 * 60 * 60;
 exports.Port = process.env.PORT || 3000;
 
 // Configuration required for DocumentDB
 exports.docDB = {
-  Host: process.env.DocDb_Host,
-  AuthKey: process.env.DocDb_AuthKey
+  Host: process.env.DocDbHost,
+  AuthKey: process.env.DocDbAuthKey
 };
 
 // Notification Function
@@ -46,7 +46,19 @@ var validateConfig = function (config, envKey, messageIfNotFound) {
   }
 }
 
-validateConfig(exports.docDB.Host, "DocDb_Host");
-validateConfig(exports.docDB.AuthKey, "DocDb_AuthKey");
+// Validated required AAD/Passport config
+validateConfig(exports.creds.identityMetadata, "IdentityMetadata");
+validateConfig(exports.creds.clientID, "ClientID");
+validateConfig(exports.creds.redirectUrl, "RedirectUrl");
+validateConfig(exports.destroySessionUrl, "DestroySessionUrl");
+
+// Validate required Documment DB config
+validateConfig(exports.docDB.Host, "DocDbHost");
+validateConfig(exports.docDB.AuthKey, "DocDbAuthKey");
+
+// Validate required Azure Functions config
 validateConfig(exports.notifyPoliceUrl, "NotifyPoliceUrl");
-validateConfig(exports.validateTokenUrl, "validateTokenUrl");
+validateConfig(exports.validateTokenUrl, "ValidateTokenUrl");
+
+// Validate required authorization config
+validateConfig(exports.requiredAADGroupId, "RequiredAADGroupId");

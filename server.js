@@ -8,7 +8,6 @@ var methodOverride = require('method-override');
 var passport = require('passport');
 var util = require('util');
 var bunyan = require('bunyan');
-var mongoose = require('mongoose');
 var config = require('./config');
 var ProfileApi = require('./apis/profiles');
 var TokenApi = require('./apis/token');
@@ -16,8 +15,6 @@ var TokenApi = require('./apis/token');
 // Controllers
 var profiles = require('./controllers/profilesController');
 var token = require('./controllers/tokenController');
-
-var MongoStore = require('connect-mongo')(expressSession);
 
 var OIDCStrategy = require('passport-azure-ad').OIDCStrategy;
 
@@ -94,33 +91,39 @@ app.use(express.logger());
 app.use(methodOverride());
 app.use(cookieParser());
 app.use(express.static('public'));
-
-// set up session middleware
-if (config.useMongoDBSessionStore) {
-  mongoose.connect(config.databaseUri);
-  app.use(express.session({
-    secret: 'secret',
-    cookie: { maxAge: config.mongoDBSessionMaxAge * 1000 },
-    store: new MongoStore({
-      mongooseConnection: mongoose.connection,
-      clear_interval: config.mongoDBSessionMaxAge
-    })
-  }));
-} else {
-  app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized: false }));
-}
+app.use(expressSession({ secret: 'keyboard cat', resave: true, saveUninitialized: false }));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(app.router);
 
-function ensureAuthenticated(req, res, next) {
-  if (req.isAuthenticated()) { return next(); }
+function ensureAuthorized(req, res, next) {
+  if (req.isAuthenticated()) {
+    // User is authenticated, ensure they are authorized
+    if (userIsAuthorized(req.user)) {
+      return next();
+    }
+    res.status(401)
+    res.render('unauthorized', {user: req.user});
+    //res.redirect(401, '/logout');
+    return;
+  }
   res.redirect('/login');
 };
 
-function ensureAuthenticatedOrToken(req, res, next) {
+// Verifies that the user is authorized to use this application
+// Defaults to validating that the user belongs to the configured AAD group
+function userIsAuthorized(user) {
+  if (user._json.groups.indexOf(config.requiredAADGroupId) > -1) {
+    return true;
+  };
+
+  log.info("!!! User: " + user._json.preferred_username + " is not authorized to access this application.")
+  return false;
+};
+
+function ensureAuthorizedOrToken(req, res, next) {
   if (req.query.access_token != null) {
     var token = req.query.access_token;
     var id = req.params.id;
@@ -139,31 +142,33 @@ function ensureAuthenticatedOrToken(req, res, next) {
   }
   else
   {
-    return ensureAuthenticated(req, res, next);
+    return ensureAuthorized(req, res, next);
   }
 };
 
-app.get('/login',
-  function (req, res, next) {
+// LOGIN
+app.get('/login/aad', function (req, res, next) {
     passport.authenticate('azuread-openidconnect',
       {
-        session: false,
-        response: res,                      // required
-        resourceURL: config.resourceURL,    // optional. Provide a value if you want to specify the resource.
+        response: res,
         failureRedirect: '/'
       }
     )(req, res, next);
   },
   function (req, res) {
-    log.info('Login was called in the Sample');
     res.redirect('/');
   });
 
+app.get('/login', function (req, res) {
+  res.render('login', {user: req.user});
+});
+
+// AAD / PASSPORT
 app.get('/auth/openid/return',
   function (req, res, next) {
     passport.authenticate('azuread-openidconnect',
       {
-        response: res,                      // required
+        response: res,
         failureRedirect: '/'
       }
     )(req, res, next);
@@ -194,28 +199,22 @@ app.get('/logout', function (req, res) {
   });
 });
 
-// APP
-app.get('/', function (req, res) {
-  if (req.isAuthenticated()) {
-    new ProfileApi(config.docDB).getList().then((profiles) => {
-      res.render('index', {
-        user: req.user,
-        profiles: profiles
-      });
-    })
-  }
-  else {
+// HOMEPAGE
+app.get('/', ensureAuthorized, function (req, res) {
+  new ProfileApi(config.docDB).getList().then((profiles) => {
     res.render('index', {
-      user: req.user
+      user: req.user,
+      profiles: profiles
     });
-  }
+  })
 });
 
-app.get('/profile/:id', ensureAuthenticatedOrToken, profiles.show);
+// PROFILES
+app.get('/profile/:id', ensureAuthorizedOrToken, profiles.show);
 
 // APIS
-app.get('/api/profiles', ensureAuthenticated, profiles.list);
-app.put('/api/notify', ensureAuthenticated, token.send);
-app.post('/api/notify', ensureAuthenticated, token.send);
+app.get('/api/profiles', ensureAuthorized, profiles.list);
+app.put('/api/notify', ensureAuthorized, token.send);
+app.post('/api/notify', ensureAuthorized, token.send);
 
 app.listen(config.Port);
