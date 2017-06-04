@@ -2,6 +2,7 @@
   "name": "portal",
   "version": "0.0.2",
   "dependencies": {
+    "applicationinsights": "^0.20.1",
     "assert-plus": "*",
     "body-parser": "^1.15.2",
     "bunyan": "*",

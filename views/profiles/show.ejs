@@ -90,10 +90,14 @@
                     </span>
                   </div>
                   <div id="email-sent-success" class="alert alert-success alert-dismissable" hidden="true">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <button id="successCloseBtn" type="button" class="close" aria-hidden="true">&times;</button>
+                    <p id="email-sent-success-text" class="text">
+                       </p>
                   </div>
                   <div id="email-sent-failed" class="alert alert-failure alert-dismissable" hidden="true">
-                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <button id="failCloseBtn" type="button" class="close" onclick="email-sent-success" aria-hidden="true">&times;</button>
+                    <p id="email-sent-failed-text" class="text">
+                       </p>
                   </div>
                 </div>
                 <% } %>
@@ -206,6 +210,11 @@
 </div>
 
 <script>
+
+  $("#successCloseBtn").bind('click', function () {
+    $("#email-sent-success").hide();});
+  $("#failCloseBtn").bind('click', function () {
+    $("#email-sent-success").hide();});
     $("#sendBtn").bind('click', function () {
       var id = document.getElementById("profileId").value
       var sendEmail = document.getElementById("sendEmail").value
@@ -221,15 +230,18 @@
           url: '/api/notify',
           dataType: "json",
           data: d,
-          success: function() {
-            var div = document.getElementById('email-sent-success');
+          statusCode:
+          {
+          200 : function() {
+            var div = document.getElementById('email-sent-success-text');
             div.innerHTML = "Success! Profile details sent to " + sendEmail;
             $("#email-sent-success").show();
           },
-          error: function() {
-            var div = document.getElementById('email-sent-failed');
+          500 : function() {
+            var div = document.getElementById('email-sent-failed-text');
             div.innerHTML = "Failure! Profile details not sent to " + sendEmail;
             $("#email-sent-failed").show();
+          },
           }
         })
       }
