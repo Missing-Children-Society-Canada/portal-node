@@ -17,7 +17,7 @@
     crossorigin="anonymous">
   <link rel="stylesheet" href="/css/app.css">
   <link rel="stylesheet" href="/css/font-awesome.min.css">
-  
+
   <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
     crossorigin="anonymous"></script>
@@ -29,17 +29,14 @@
       <div class="navbar-header">
         <a class="navbar-brand" href="/">People Finder</a>
       </div>
-
-      <!-- Collect the nav links, forms, and other content for toggling -->
-      <div class="navbar-collapse" id="bs-example-navbar-collapse-1">
-        <form class="navbar-form navbar-right">
-          <% if (user) { %>
+      <% if (user) { %>
+        <div class="navbar-collapse" id="bs-example-navbar-collapse-1">
+          <form class="navbar-form navbar-right">
+            <%= user.displayName %>
             <a href="/logout" class="btn btn-default"><span class="glyphicon glyphicon-off"></span></a>
-            <% } %>
-        </form>
-      </div>
-      <!-- /.navbar-collapse -->
+          </form>
+        </div>
+      <% } %>
     </div>
-    <!-- /.container-fluid -->
   </nav>
   <div class="page-wrapper">
