@@ -10,15 +10,14 @@ Portal for visualization of data, for the overview and individual profiles.
 - node server.js
 - http://localhost:3000
 
-## Environment Variables
-
-    AADTenant=
-    AADClient_ID=
-    RedirectUrl=
-    ClientSecret=
-    DestroySessionUrl=
-    DocDb_Host=
-    DocDb_AuthKey===
-    NotifyPoliceUrl=
-    ValidateTokenUrl=
-
+### Configuration
+* AADTenant: 
+* AADClient_ID: 
+* RedirectUrl: 
+* ClientSecret: 
+* DestroySessionUrl: 
+* DataStore: 
+* DocDb_Host: 
+* DocDb_AuthKey: 
+* NotifyPoliceUrl: 
+* ValidateTokenUrl: 
