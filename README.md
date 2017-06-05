@@ -118,4 +118,3 @@ A 12 character string used for the [IV](https://en.wikipedia.org/wiki/Initializa
 ) for the aes-256-gcm cookie encryption.  For more information see the [AAD Passport documentation](https://github.com/AzureAD/passport-azure-ad).
 
 > You can get a randomly generated `key` & `iv` via this Azure Function: [TDESGenerate](https://cryptoserviceprovider.azurewebsites.net/api/TDESGenerate) ([.NET source code](https://github.com/m-gagne/CryptoServiceProvider)).
-
