@@ -51,8 +51,8 @@ validateConfig(exports.creds.identityMetadata, "IdentityMetadata");
 validateConfig(exports.creds.clientID, "ClientID");
 validateConfig(exports.creds.redirectUrl, "RedirectUrl");
 validateConfig(exports.destroySessionUrl, "DestroySessionUrl");
-validateConfig(exports.creds.cookieEncryptionKey, "CookieEncryptionKey");
-validateConfig(exports.creds.cookieEncryptionIv, "CookieEncryptionIv");
+validateConfig(process.env.cookieEncryptionKey, "CookieEncryptionKey");
+validateConfig(process.env.cookieEncryptionIv, "CookieEncryptionIv");
 
 // Validate required Documment DB config
 validateConfig(exports.docDB.Host, "DocDbHost");

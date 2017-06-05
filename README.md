@@ -63,8 +63,8 @@ Use the below variables in your `.env` file or in your [Azure Web Application's 
     NotifyPoliceUrl=
     ValidateTokenUrl=
     RequiredAADGroupId=
-    cookieEncryptionKey=
-    cookieEncryptionIv=
+    CookieEncryptionKey=
+    CookieEncryptionIv=
     AppInsightsInstrumentationKey=
 
 More details for the AAD Passport specific settings can be found in the [AAD Passport GitHub page](https://github.com/AzureAD/passport-azure-ad).
@@ -107,13 +107,13 @@ The secure Azure Function URL for the `ValidateToken` API which allows for autho
 
 The AAD Directory Group id which the authenticated user must be a member of to pass authorization checks. If the user is authenticated (can log in), but is not a member of the configured group then they will be denied access (Status: 401).
 
-#### cookieEncryptionKey
+#### CookieEncryptionKey
 
 A 32 character string used for the encryption key for the aes-256-gcm cookie encryption. For more information see the [AAD Passport documentation](https://github.com/AzureAD/passport-azure-ad).
 
 > You can get a randomly generated `key` & `iv` via this Azure Function: [TDESGenerate](https://cryptoserviceprovider.azurewebsites.net/api/TDESGenerate).
 
-#### cookieEncryptionIv
+#### CookieEncryptionIv
 
 A 12 character string used for the [IV](https://en.wikipedia.org/wiki/Initialization_vector) (Initialization vector
 ) for the aes-256-gcm cookie encryption.  For more information see the [AAD Passport documentation](https://github.com/AzureAD/passport-azure-ad).
