@@ -13,9 +13,9 @@ Portal for visualization of data, for the overview and individual profiles.
 ### Configuration
 * AADTenant: Azure AD Tenant
 * AADClient_ID: Azure AD Client ID
-* RedirectUrl: 
-* ClientSecret: 
-* DestroySessionUrl: 
+* RedirectUrl: URL to bring user back to app
+* ClientSecret: Azure AD Secret
+* DestroySessionUrl: Azure AD Service, Session Destroyer
 * DataStore: Cosmos DB Connection String
 * DocDb_Host: Cosmos DB Host
 * DocDb_AuthKey: Cosmos DB Authorization Key
