@@ -10,7 +10,8 @@ Portal for visualization of data, for the overview and individual profiles.
 * You must already have a valid Azure AD Tenant (the default one along with the default Directory provided with your Azure Subscription will do).
 * You must [create a group in that directory](https://docs.microsoft.com/en-us/azure/active-directory/active-directory-groups-create-azure-portal), I suggest using the name `MCSC-Portal-Users`
 * Save the Group's id (aka the Object ID) for later
-* Assign one or more users to this group, these will be the users that will be authorized to log into the portal
+* Assign one or more users to this group, these will be the users that will be authorized to log into the portal.
+    * **Note:** You can add guest users so they can reuse existing account (e.g. @outlook, @contoso.com, etc.)
 
 ### Application Registration for AAD Authentication
 
