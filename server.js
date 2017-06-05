@@ -116,9 +116,7 @@ function ensureAuthorized(req, res, next) {
     if (userIsAuthorized(req.user)) {
       return next();
     }
-    res.status(401)
-    res.render('unauthorized', {user: req.user});
-    //res.redirect(401, '/logout');
+    res.redirect('/unauthorized');
     return;
   }
   res.redirect('/login');
@@ -209,6 +207,11 @@ app.get('/logout', function (req, res) {
     req.logOut();
     res.redirect(config.destroySessionUrl);
   });
+});
+
+app.get('/unauthorized', function (req, res) {
+  res.status(401);
+  res.render('unauthorized', {user: req.user});
 });
 
 // HOMEPAGE
