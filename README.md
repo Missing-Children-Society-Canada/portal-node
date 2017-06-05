@@ -11,13 +11,13 @@ Portal for visualization of data, for the overview and individual profiles.
 - http://localhost:3000
 
 ### Configuration
-* AADTenant: 
-* AADClient_ID: 
+* AADTenant: Azure AD Tenant
+* AADClient_ID: Azure AD Client ID
 * RedirectUrl: 
 * ClientSecret: 
 * DestroySessionUrl: 
-* DataStore: 
-* DocDb_Host: 
-* DocDb_AuthKey: 
-* NotifyPoliceUrl: 
-* ValidateTokenUrl: 
+* DataStore: Cosmos DB Connection String
+* DocDb_Host: Cosmos DB Host
+* DocDb_AuthKey: Cosmos DB Authorization Key
+* NotifyPoliceUrl: Service for sending Police a notification
+* ValidateTokenUrl: Service for validating onetime use tokens
