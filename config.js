@@ -12,7 +12,7 @@ exports.creds = {
   passReqToCallback: false,
   useCookieInsteadOfSession: true,
   cookieEncryptionKeys: [
-    { 'key': process.env.cookieEncryptionKey, 'iv': process.env.cookieEncryptionIv }
+    { 'key': process.env.CookieEncryptionKey, 'iv': process.env.CookieEncryptionIv }
   ],
   scope: ['profile', 'offline_access' ],
   loggingLevel: 'info',
@@ -27,7 +27,7 @@ exports.requiredAADGroupId = process.env.RequiredAADGroupId;
 exports.destroySessionUrl = process.env.DestroySessionUrl || 'https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri=http://localhost:3000'
 exports.databaseUri = process.env.DataStore;
 exports.Port = process.env.PORT || 3000;
-exports.AppInsights = process.env.APPINSIGHTS_INSTRUMENTATIONKEY;
+exports.AppInsights = process.env.AppInsightsInstrumentationKey;
 
 // Configuration required for DocumentDB
 exports.docDB = {
@@ -52,6 +52,8 @@ validateConfig(exports.creds.identityMetadata, "IdentityMetadata");
 validateConfig(exports.creds.clientID, "ClientID");
 validateConfig(exports.creds.redirectUrl, "RedirectUrl");
 validateConfig(exports.destroySessionUrl, "DestroySessionUrl");
+validateConfig(exports.creds.cookieEncryptionKey, "CookieEncryptionKey");
+validateConfig(exports.creds.cookieEncryptionIv, "CookieEncryptionIv");
 
 // Validate required Documment DB config
 validateConfig(exports.docDB.Host, "DocDbHost");
@@ -63,3 +65,6 @@ validateConfig(exports.validateTokenUrl, "ValidateTokenUrl");
 
 // Validate required authorization config
 validateConfig(exports.requiredAADGroupId, "RequiredAADGroupId");
+
+// Misc
+validateConfig(exports.AppInsights, "AppInsightsInstrumentationKey");

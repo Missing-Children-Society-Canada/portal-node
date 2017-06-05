@@ -65,6 +65,7 @@ Use the below variables in your `.env` file or in your [Azure Web Application's 
     RequiredAADGroupId=
     cookieEncryptionKey=
     cookieEncryptionIv=
+    AppInsightsInstrumentationKey=
 
 More details for the AAD Passport specific settings can be found in the [AAD Passport GitHub page](https://github.com/AzureAD/passport-azure-ad).
 
@@ -118,3 +119,7 @@ A 12 character string used for the [IV](https://en.wikipedia.org/wiki/Initializa
 ) for the aes-256-gcm cookie encryption.  For more information see the [AAD Passport documentation](https://github.com/AzureAD/passport-azure-ad).
 
 > You can get a randomly generated `key` & `iv` via this Azure Function: [TDESGenerate](https://cryptoserviceprovider.azurewebsites.net/api/TDESGenerate) ([.NET source code](https://github.com/m-gagne/CryptoServiceProvider)).
+
+#### AppInsightsInstrumentationKey
+
+The Application Insights instrumentation key for analytics.
