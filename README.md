@@ -63,7 +63,8 @@ Use the below variables in your `.env` file or in your [Azure Web Application's 
     NotifyPoliceUrl=<AZURE_FUNCTION_URL_FOR_API_NOTIFY_POLICE>
     ValidateTokenUrl=<AZURE_FUNCTION_URL_FOR_API_VALIDATE_TOKEN>
     RequiredAADGroupId=<AAD_DIRECTORY_GROUP_OBJECT_ID>
-
+    cookieEncryptionKey=<RANDOM_32_CHARACTER_KEY>
+    cookieEncryptionIv=<RANDOM_12_CHARACTER_INITIALIZATION_VECTOR>
 
 More details for the AAD Passport specific settings can be found in the [AAD Passport GitHub page](https://github.com/AzureAD/passport-azure-ad).
 
@@ -104,3 +105,17 @@ The secure Azure Function URL for the `ValidateToken` API which allows for autho
 #### RequiredAADGroupId
 
 The AAD Directory Group id which the authenticated user must be a member of to pass authorization checks. If the user is authenticated (can log in), but is not a member of the configured group then they will be denied access (Status: 401).
+
+#### cookieEncryptionKey
+
+A 32 character string used for the encryption key for the aes-256-gcm cookie encryption. For more information see the [AAD Passport documentation](https://github.com/AzureAD/passport-azure-ad).
+
+> You can get a randomly generated `key` & `iv` via this Azure Function: [TDESGenerate](https://cryptoserviceprovider.azurewebsites.net/api/TDESGenerate).
+
+#### cookieEncryptionIv
+
+A 12 character string used for the [IV](https://en.wikipedia.org/wiki/Initialization_vector) (Initialization vector
+) for the aes-256-gcm cookie encryption.  For more information see the [AAD Passport documentation](https://github.com/AzureAD/passport-azure-ad).
+
+> You can get a randomly generated `key` & `iv` via this Azure Function: [TDESGenerate](https://cryptoserviceprovider.azurewebsites.net/api/TDESGenerate) ([.NET source code](https://github.com/m-gagne/CryptoServiceProvider)).
+

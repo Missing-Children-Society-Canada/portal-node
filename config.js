@@ -12,7 +12,7 @@ exports.creds = {
   passReqToCallback: false,
   useCookieInsteadOfSession: true,
   cookieEncryptionKeys: [
-    { 'key': '12345678901234567890123456789012', 'iv': '123456789012' }
+    { 'key': process.env.cookieEncryptionKey, 'iv': process.env.cookieEncryptionIv }
   ],
   scope: ['profile', 'offline_access' ],
   loggingLevel: 'info',
