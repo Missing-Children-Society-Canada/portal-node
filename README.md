@@ -53,26 +53,26 @@ If you have not yet created a "Converged Application" (aka Azure AD v2.0 endpoin
 
 Use the below variables in your `.env` file or in your [Azure Web Application's App Settings](https://docs.microsoft.com/en-us/azure/app-service-web/web-sites-configure).
 
-    IdentityMetadata=<https://login.microsoftonline.com/{YOUR_TENANT_NAME}.onmicrosoft.com/v2.0/.well-known/openid-configuration>
-    ClientID=<Your Azure Active Directory client id>
-    ClientSecret=<This credential could be client secret or client assertion>
-    RedirectUrl=<Reply URL registered in AAD for your app>
-    DestroySessionUrl=<https://login.microsoftonline.com/common/oauth2/logout?post_logout_redirect_uri=http://localhost:3000>
-    DocDbHost=<https://{DOC_DB_ACCOUNT_NAME}.documents.azure.com:443>
-    DocDbAuthKey=<DOCUMENT_DB_READ_WRITE_ACCESS_KEY>
-    NotifyPoliceUrl=<AZURE_FUNCTION_URL_FOR_API_NOTIFY_POLICE>
-    ValidateTokenUrl=<AZURE_FUNCTION_URL_FOR_API_VALIDATE_TOKEN>
-    RequiredAADGroupId=<AAD_DIRECTORY_GROUP_OBJECT_ID>
-    cookieEncryptionKey=<RANDOM_32_CHARACTER_KEY>
-    cookieEncryptionIv=<RANDOM_12_CHARACTER_INITIALIZATION_VECTOR>
+    IdentityMetadata=
+    ClientID=
+    ClientSecret=
+    RedirectUrl=
+    DestroySessionUrl=
+    DocDbHost=
+    DocDbAuthKey=
+    NotifyPoliceUrl=
+    ValidateTokenUrl=
+    RequiredAADGroupId=
+    cookieEncryptionKey=
+    cookieEncryptionIv=
 
 More details for the AAD Passport specific settings can be found in the [AAD Passport GitHub page](https://github.com/AzureAD/passport-azure-ad).
 
-### Environment Variables Explained
+### Details
 
 #### IdentityMetadata
 
-The metadata endpoint provided by the Microsoft Identity Portal that provides the keys and other important information at runtime. Example: `  https://login.microsoftonline.com/your_tenant_name.onmicrosoft.com/v2.0/.well-known/openid-configuration`
+The metadata endpoint provided by the Microsoft Identity Portal that provides the keys and other important information at runtime. Example: `  https://login.microsoftonline.com/<YOUR_AAD_TENANT_NAME>.onmicrosoft.com/v2.0/.well-known/openid-configuration`
 
 #### ClientID
 
