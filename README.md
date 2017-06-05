@@ -14,6 +14,8 @@ Portal for visualization of data, for the overview and individual profiles.
 
 ### Application Registration for AAD Authentication
 
+> Current Dev/DevProd environment uses an application registered under `admin.mcsc@strutcreative.com`
+
 If you have not yet created a "Converged Application" (aka Azure AD v2.0 endpoint for AAD sign on) you will need to follow these steps:
 
 1. Navigate to https://apps.dev.microsoft.com/?deeplink=/appList

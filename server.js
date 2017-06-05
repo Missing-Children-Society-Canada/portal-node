@@ -127,7 +127,7 @@ function ensureAuthorized(req, res, next) {
 // Verifies that the user is authorized to use this application
 // Defaults to validating that the user belongs to the configured AAD group
 function userIsAuthorized(user) {
-  if (user._json.groups.indexOf(config.requiredAADGroupId) > -1) {
+  if (user._json && user._json.groups && user._json.groups.indexOf(config.requiredAADGroupId) > -1) {
     return true;
   };
 
