@@ -1,9 +1,13 @@
 <%- include('../views/partials/header.ejs') %>
-  <div>
-      <%= profiles.length %>
-  </div>
+
   <div class="container page home">
     <div>
+      <% if (0 == profiles.length){ %>
+          <strong>
+            Currently, there are no missing persons.
+          </strong>
+        <% } %>
+
       <table id="profile-list" class="table table-hover tr-link">
         <thead>
           <td><strong>Missing Persons</strong></td>
