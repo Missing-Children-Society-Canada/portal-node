@@ -68,7 +68,7 @@ Profile.prototype.getEmailFromEvent = function (event) {
     return null;
 }
 
-// Gets the users twitter hande from the event
+// Gets the users twitter handle from the event
 Profile.prototype.getTwitterHandleFromEvent = function (event) {
     if (event.user && event.user.twitter && event.user.twitter.username) {
         return event.user.twitter.username;
@@ -78,7 +78,7 @@ Profile.prototype.getTwitterHandleFromEvent = function (event) {
 }
 
 
-// Gets the users instagram hande from the event
+// Gets the users instagram handle from the event
 Profile.prototype.getInstagramHandleFromEvent = function (event) {
     if (event.user && event.user.instagram && event.user.instagram.username) {
         return event.user.instagram.username;
@@ -87,7 +87,7 @@ Profile.prototype.getInstagramHandleFromEvent = function (event) {
     return null;
 }
 
-// Gets the users instagram hande from the event
+// Gets the users instagram handle from the event
 Profile.prototype.getFacebookHandleFromEvent = function (event) {
     if (event.user && event.user.facebook && event.user.facebook.$id) {
         return event.user.facebook.$id;
@@ -107,33 +107,39 @@ Profile.prototype.extractTwitterSocialInformation = function (profile, event) {
         return;
     }
 
-    let data = event.response.data;
+    this.ensureTwitterStatusAdded(profile, event.response.data.status, true);
+}
+
+Profile.prototype.ensureTwitterStatusAdded = function (profile, status, triggerStatus) {
     if (!profile.social.twitter.status) {
         profile.social.twitter.status = [];
     }
+
     // Do we already have this status?
     var uniqueStatus = true;
-    profile.social.twitter.status.forEach((status) => {
-        if (status.id === data.status.id) {
+    profile.social.twitter.status.forEach((s) => {
+        if (s.id === status.id) {
             uniqueStatus = false;
             return;
         }
     });
+
     if (uniqueStatus) {
         profile.social.twitter.status.push({
-            id: data.status.id,
-            id_str: data.status.id_str,
-            text: data.status.text,
-            createdAd: new Date(data.status.created_at),
+            id: status.id,
+            id_str: status.id_str,
+            text: status.text,
+            createdAd: new Date(status.created_at),
             // Source is a link to download the app, we don't need that
-            source: data.status.source.replace(/<[^>]*>/g, ""),
-            geo: data.status.geo,
-            coordinates: data.status.coordinates,
+            source: status.source.replace(/<[^>]*>/g, ""),
+            geo: status.geo,
+            coordinates: status.coordinates,
             place: {
-                type: data.status.place ? data.status.place.place_type : null,
-                name: data.status.place ? data.status.place.full_name : null,
-                country: data.status.place ? data.status.place.country : null
-            }
+                type: status.place ? status.place.place_type : null,
+                name: status.place ? status.place.full_name : null,
+                country: status.place ? status.place.country : null
+            },
+            triggerStatus: triggerStatus
         });
     }
 }
@@ -197,63 +203,90 @@ Profile.prototype.extractInstagramSocialInformation = function (profile, event) 
     //});
 }
 
+// build user profile(s) for use on both the list and detail pages.
+Profile.prototype.buildProfiles = function (events) {
+    let profiles = {};
+
+    events.forEach((event) => {
+        let userid = event.user.id;
+
+        let profile = profiles[userid] || {
+            id: userid,
+            eventCount: 0,
+
+            mostRecentPlatform: event.response.platform,
+            triggeredOn: new Date(event.triggeredOn),
+            name: this.getNameFromEvent(event),
+            photo: this.getUserPhotoFromEvent(event),
+            birthday: null,
+            social: {
+                twitter: {},
+                facebook: {},
+                instagram: {}
+            }
+        };
+
+        profile.eventCount++;
+
+        this.assignIfNotNull(profile, 'email', this.getEmailFromEvent(event));
+        this.assignIfNotNull(profile, 'gender', this.getUserGenderFromEvent(event));
+        this.assignIfNotNull(profile, 'birthday', this.getUserBirthdayFromEvent(event));
+        this.assignIfNotNull(profile.social.twitter, 'handle', this.getTwitterHandleFromEvent(event));
+        this.assignIfNotNull(profile.social.instagram, 'handle', this.getInstagramHandleFromEvent(event));
+        this.assignIfNotNull(profile.social.facebook, 'profile', this.getFacebookHandleFromEvent(event));
+
+        // calculate age (source: http://stackoverflow.com/questions/4060004/calculate-age-in-javascript)
+        if (profile.birthday) {
+            var ageDifMs = Date.now() - profile.birthday.getTime();
+            var ageDate = new Date(ageDifMs); // miliseconds from epoch
+            profile.age = Math.abs(ageDate.getUTCFullYear() - 1970);
+        }
+
+        profiles[userid] = profile;
+    });
+
+    return profiles;
+}
+
+Profile.prototype.addHistoricalStatuses = function (resolve, reject, profile, docDbClient) {
+    var querySpec = {
+        query: 'SELECT * FROM c WHERE c.response.type =\'media\' AND c.user.id = @id ORDER BY c.triggeredOn DESC', 
+        parameters: [{name: '@id',  value: profile.id}]
+    };
+
+    const options = {
+        enableCrossPartitionQuery: true
+    };
+
+    docDbClient.queryDocuments(this.config.CollLink, querySpec, options).toArray((err, results) => {
+
+        results.forEach((event) => {
+            if (event.response.platform === "twitter") {
+                // Earlier documents during development don't include tweetHistoryData.
+                if (event.response.data.tweetHistoryData) {
+                    event.response.data.tweetHistoryData.statuses.forEach((status) => {
+                        this.ensureTwitterStatusAdded(profile, status, false);
+                    });
+                }
+            }
+        });
+
+        resolve(profile);
+    });
+}
+
 Profile.prototype.getList = function () {
     return new Promise((resolve, reject) => {
-        let data = [];
         const docDbClient = new DocumentDBClient(this.config.Host, { masterKey: this.config.AuthKey });
+
         const query = 'SELECT * FROM c WHERE c.response.type =\'profile\' ORDER BY c.triggeredOn DESC';
+
         const options = {
             enableCrossPartitionQuery: true
-        }
+        };
+
         docDbClient.queryDocuments(this.config.CollLink, query, options).toArray((err, results) => {
-            let profiles = {};
-            results.forEach((event) => {
-                let userid = event.user.id;
-
-                let profile = profiles[userid] || {
-                    id: userid,
-                    eventCount: 0,
-
-                    mostRecentPlatform: event.response.platform,
-                    triggeredOn: new Date(event.triggeredOn),
-                    name: this.getNameFromEvent(event),
-                    photo: this.getUserPhotoFromEvent(event),
-                    birthday: null,
-                    social: {
-                        twitter: {},
-                        facebook: {},
-                        instagram: {}
-                    }
-                };
-
-                profile.eventCount++;
-
-                this.assignIfNotNull(profile, 'email', this.getEmailFromEvent(event));
-                this.assignIfNotNull(profile, 'gender', this.getUserGenderFromEvent(event));
-                this.assignIfNotNull(profile, 'birthday', this.getUserBirthdayFromEvent(event));
-                this.assignIfNotNull(profile.social.twitter, 'handle', this.getTwitterHandleFromEvent(event));
-                this.assignIfNotNull(profile.social.instagram, 'handle', this.getInstagramHandleFromEvent(event));
-                this.assignIfNotNull(profile.social.facebook, 'profile', this.getFacebookHandleFromEvent(event));
-
-                if (event.response.platform === "twitter") {
-                    this.extractTwitterSocialInformation(profile, event);
-                }
-                else if (event.response.platform === "facebook") {
-                    this.extractFacebookSocialInformation(profile, event);
-                }
-                else if (event.response.platform === "instagram") {
-                    this.extractInstagramSocialInformation(profile, event);
-                }
-
-                // calculate age (source: http://stackoverflow.com/questions/4060004/calculate-age-in-javascript)
-                if (profile.birthday) {
-                    var ageDifMs = Date.now() - profile.birthday.getTime();
-                    var ageDate = new Date(ageDifMs); // miliseconds from epoch
-                    profile.age = Math.abs(ageDate.getUTCFullYear() - 1970);
-                }
-
-                profiles[userid] = profile;
-            });
+            let profiles = this.buildProfiles(results);
 
             // convert to array
             let profileArray = [];
@@ -267,16 +300,45 @@ Profile.prototype.getList = function () {
 }
 
 Profile.prototype.get = function (id) {
-    // TODO: refactor GetList to seperate profile creation, then direct query for a given profile
     return new Promise((resolve, reject) => {
-        this.getList().then((profiles) => {
-            profiles.forEach((profile) => {
-                if (profile.id === id) {
-                    //console.log(JSON.stringify(profile, null, 4));
-                    resolve(profile);
+        const docDbClient = new DocumentDBClient(this.config.Host, { masterKey: this.config.AuthKey });
+
+        var querySpec = {
+            query: 'SELECT * FROM c WHERE c.response.type =\'profile\' AND c.user.id = @id ORDER BY c.triggeredOn DESC', 
+            parameters: [{name: '@id',  value: id}]
+        };
+
+        const options = {
+            enableCrossPartitionQuery: true
+        };
+
+        docDbClient.queryDocuments(this.config.CollLink, querySpec, options).toArray((err, results) => {
+            // Build the core profile.
+            let profiles = this.buildProfiles(results);
+
+            let profile = profiles[id];
+
+            if (!profile) {
+                reject("Profile not found");
+                return;
+            }
+
+            // Add triggering statuses to the profile.
+            results.forEach((event) => {
+                if (event.response.platform === "twitter") {
+                    this.extractTwitterSocialInformation(profile, event);
+                }
+                else if (event.response.platform === "facebook") {
+                    this.extractFacebookSocialInformation(profile, event);
+                }
+                else if (event.response.platform === "instagram") {
+                    this.extractInstagramSocialInformation(profile, event);
                 }
             });
-            reject("Profile not found");
+
+            // Add historical statuses to the profile.
+            // TODO: Add media too.
+            this.addHistoricalStatuses(resolve, reject, profile, docDbClient);
         });
     });
 }
