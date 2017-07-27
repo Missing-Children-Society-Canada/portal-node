@@ -139,7 +139,7 @@
               <tr>
                 <td><a href="https://twitter.com/<%=profile.social.twitter.handle%>/status/<%=status.id_str%>" target="_blank"><span class="glyphicon glyphicon-link"></span></a></td>
                 <td><h6><%= status.createdAd.toLocaleString() %></h6></td>
-                <td><%= status.text %></td>
+                <td><div class="<%= (status.triggerStatus ? "triggerStatus" : "") %>"><%= status.text %></div></td>
                 <td><h6><%= status.source %></h6></td>
                 <td><%= status.geo %></td>
                 <td><%= status.coordinates %></td>
