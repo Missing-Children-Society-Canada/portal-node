@@ -8,8 +8,7 @@ var Token = function () {
 
 Token.prototype.send = function (userid, email) {
     return new Promise((resolve, reject) => {
-        var r;
-        request.post(
+        return request.post(
             config.notifyPoliceUrl,
             {
                 json: {
@@ -22,21 +21,16 @@ Token.prototype.send = function (userid, email) {
                     console.error("Success notifying police");
                     resolve(response);
                 }
+                else if (error) {
+                    console.error("Error notifying police : " + error);
+                    reject(Error(error));
+                }
                 else {
-                    if (error)
-                    {
-                        console.error("Error notifying police : "+error);
-                        reject(Error(error));
-                    }
-                    else
-                    {
-                        console.error("Issue notifying police : "+response.statusCode);
-                         reject(response);
-                    }
+                    console.error("Issue notifying police : " + response.statusCode);
+                    reject(response);
                 }
             }
         );
-        resolve();
     });
 }
 
