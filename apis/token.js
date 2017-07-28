@@ -31,12 +31,12 @@ Token.prototype.send = function (userid, email) {
                     else
                     {
                         console.error("Issue notifying police : "+response.statusCode);
-                         reject(response);
+                        reject(response);
                     }
                 }
             }
         );
-        resolve();
+        // resolve(); // this would force code to always resolve.
     });
 }
 
