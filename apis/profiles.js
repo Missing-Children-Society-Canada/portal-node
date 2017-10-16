@@ -129,7 +129,7 @@ Profile.prototype.ensureTwitterStatusAdded = function (profile, status, triggerS
             id: status.id,
             id_str: status.id_str,
             text: status.text,
-            createdAd: new Date(status.created_at),
+            createdAt: new Date(status.created_at),
             // Source is a link to download the app, we don't need that
             source: status.source.replace(/<[^>]*>/g, ""),
             geo: status.geo,
@@ -178,29 +178,39 @@ Profile.prototype.extractInstagramSocialInformation = function (profile, event) 
         return;
     }
 
-    let data = event.response.data;
-    // if (!profile.social.instagram.status) {
-    //     profile.social.instagram.posts = [];
-    // }
+    // Do something for just the profile?
+    if (event.response.type !== "media") {
+        return;
+    }
+    this.ensureInstagramPostAdded(profile, event.response.data);
+}
 
-    // Do we already have this post?
-    // let postLookup = {};
-    // profile.social.instagram.posts.forEach((post) => {
-    //     postLookup[post.id] = true;
-    // });
+Profile.prototype.ensureInstagramPostAdded = function (profile, post) {
+    if (!profile.social.instagram.posts) {
+        profile.social.instagram.posts = [];
+    }
 
-    //data.posts.data.forEach((post) => {
-        //if (!postLookup[post.id]) {
-            //profile.social.instagram.posts.push({
-                // id: post.id,
-                // created_time: new Date(post.created_time),
-                // message: post.message,
-                // story: post.story
-            //});
+    // Do we already have this status?
+    var uniqueData = true;
+    profile.social.instagram.posts.forEach((s) => {
+        if (s.id === post.id) {
+            uniqueData = false;
+            return;
+        }
+    });
 
-          //  postLookup[post.id] = true;
-     //   }
-    //});
+    if (uniqueData) {
+        profile.social.instagram.posts.push({
+            id: post.id,
+            text: post.caption === undefined || post.caption === null ? '' : post.caption.text,
+            // Convert to Milliseconds!
+            createdAt: new Date(post.created_time*1000),
+            source: post.link,
+            image: post.images === undefined || post.images === null ? '' : post.images.standard_resolution.url,
+            likes: post.likes === undefined || post.likes === null ? 0 : post.likes.count,
+            location : post.location
+        });
+    }
 }
 
 // build user profile(s) for use on both the list and detail pages.
@@ -267,6 +277,13 @@ Profile.prototype.addHistoricalStatuses = function (resolve, reject, profile, do
                     event.response.data.tweetHistoryData.statuses.forEach((status) => {
                         this.ensureTwitterStatusAdded(profile, status, false);
                     });
+                }
+            }
+            if (event.response.platform === "instagram") {
+                // Instagrams doesn't pull in a clump with the profile so each individual piece of media needs to be added
+                if (event.response.data) {
+                    // TODO: Add triggered information like Twitter?
+                    this.ensureInstagramPostAdded(profile, event.response.data);
                 }
             }
         });

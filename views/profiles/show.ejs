@@ -114,7 +114,7 @@
       <li class="nav active"><a href="#Twitter" data-toggle="tab"><h3><i class="fa fa-twitter-square" aria-hidden="true"></i> Tweets</h3></a></li>
       <% } if (profile.social.facebook.posts) { %>
       <li class="nav"><a href="#Facebook" data-toggle="tab"><h3><i class="fa fa-facebook-square" aria-hidden="true"></i> Posts</h3></a></li>
-      <% } if (profile.social.instagram.status) { %>
+      <% } if (profile.social.instagram.posts) { %>
       <li class="nav"><a href="#Instagram" data-toggle="tab"><h3><i class="fa fa-instagram" aria-hidden="true"></i> Posts</h3></a></li>
       <% } %>
     </ul>
@@ -138,7 +138,7 @@
               <% var status = profile.social.twitter.status[i] %>
               <tr>
                 <td><a href="https://twitter.com/<%=profile.social.twitter.handle%>/status/<%=status.id_str%>" target="_blank"><span class="glyphicon glyphicon-link"></span></a></td>
-                <td><h6><%= status.createdAd.toLocaleString() %></h6></td>
+                <td><h6><%= status.createdAt.toLocaleString() %></h6></td>
                 <td><div class="<%= (status.triggerStatus ? "triggerStatus" : "") %>"><%= status.text %></div></td>
                 <td><h6><%= status.source %></h6></td>
                 <td><%= status.geo %></td>
@@ -189,17 +189,23 @@
             <tr>
               <th></th>
               <th><span class="glyphicon glyphicon-time"></span></th>
-              <th>Message</th>
-              <th>Story</th>
+              <th>Caption</th>
+              <th>Image</th>
+              <th><span class="glyphicon glyphicon-globe"></span></th>
           </thead>
           <tbody>
             <% for(var i=0; i < profile.social.instagram.posts.length; i++) { %>
               <% var post = profile.social.instagram.posts[i] %>
               <tr>
-                <td><a href="" target="_blank"><span class="glyphicon glyphicon-link"></span></a></td>
-                <td><h6><%= post.created_time.toLocaleString() %></h6></td>
-                <td><%= post.message %></td>
-                <td><h6><%= post.story %></h6></td>
+                  <td><a href="<%=post.source%>" target="_blank"><span class="glyphicon glyphicon-link"></span></a></td>
+                  <td><h6><%= post.createdAt.toLocaleString() %></h6></td>
+                  <td><%= post.text %></td>
+                  <td><img src="<%= post.image %>" class="img-responsive"></td>
+                  <td>
+                      <% if (post.location) { %>
+                        <h6><a target="_blank" href="http://www.bing.com/maps/?v=2&cp=<%= post.location.latitude + "~" + post.location.longitude %>&sp=point.<%= post.location.latitude + "_" + post.location.longitude %>+"_Here"><%= post.location.name %></a></h6>
+                      <% } %>
+                    </td>
               </tr>
             <% } %>
           </tbody>
